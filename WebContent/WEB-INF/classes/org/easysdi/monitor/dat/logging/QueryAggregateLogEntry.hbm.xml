@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.easysdi.monitor.biz.logging">
+  <class name="QueryAggregateLogEntry" table="query_agg_log_entries">
+  	<composite-id>
+  		<key-property name="logDate" type="calendar_date" column="DATE_LOG"></key-property>
+  		<key-property name="queryId" type="long" column="ID_QUERY"></key-property>
+  	</composite-id>
+  	<component name="h24Stats" class="AggregateStats">
+	  	<property name="meanRespTime" type="float" column="H24_MEAN_RESP_TIME"></property>
+	  	<property name="availability" type="float" column="H24_AVAILABILITY"></property>
+	  	<property name="nbBizErrors" type="int" column="H24_NB_BIZ_ERRORS"></property>
+	  	<property name="nbConnErrors" type="int" column="H24_NB_CONN_ERRORS"></property>
+  		<property name="maxRespTime" type="float" column="H24_MAX_RESP_TIME"></property>
+	  	<property name="minRespTime" type="float" column="H24_MIN_RESP_TIME"></property>
+	    <property name="unavailability" type="float" column="H24_UNAVAILABILITY"></property>
+  		<property name="failure" type="float" column="H24_FAILURE"></property>
+  		<property name="untested" type="float" column="H24_UNTESTED"></property>
+  	</component>
+  	<component name="slaStats" class="AggregateStats">
+	  	<property name="meanRespTime" type="float" column="SLA_MEAN_RESP_TIME"></property>
+	  	<property name="availability" type="float" column="SLA_AVAILABILITY"></property>
+	  	<property name="nbBizErrors" type="int" column="SLA_NB_BIZ_ERRORS"></property>
+	  	<property name="nbConnErrors" type="int" column="SLA_NB_CONN_ERRORS"></property>
+  		<property name="maxRespTime" type="float" column="SLA_MAX_RESP_TIME"></property>
+	  	<property name="minRespTime" type="float" column="SLA_MIN_RESP_TIME"></property>
+  		<property name="unavailability" type="float" column="SLA_UNAVAILABILITY"></property>
+  		<property name="failure" type="float" column="SLA_FAILURE"></property>
+  		<property name="untested" type="float" column="SLA_UNTESTED"></property>
+  	</component>
+  </class>
+</hibernate-mapping>

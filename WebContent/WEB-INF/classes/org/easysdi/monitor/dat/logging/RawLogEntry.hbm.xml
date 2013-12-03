@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.easysdi.monitor.biz.logging">
+	<class name="RawLogEntry" table="log_entries">
+		<id name="logEntryId" type="long" column="ID_LOG_ENTRY">
+			<generator class="org.hibernate.id.enhanced.TableGenerator">
+				<param name="table_name">last_ids</param>
+				<param name="value_column_name">LAST_ID</param>
+				<param name="segment_column_name">TABLE_NAME</param>
+				<param name="segment_value">LOG_ENTRIES</param>
+				<param name="initial_value">1</param>
+				<param name="increment_size">1</param>
+			</generator>
+		</id>
+		<property name="queryId" type="long" column="ID_QUERY" />
+		<property name="requestTime" type="calendar" column="REQUEST_TIME" />
+		<property name="responseDelay" type="float" column="RESPONSE_DELAY" />
+		<property name="responseSize" type="long" column="RESPONSE_SIZE" />
+		<property name="message" type="text" column="MESSAGE" />
+		<property name="httpCode" type="integer" column="HTTP_CODE" />
+		<property name="serviceExceptionCode" type="string" length="100" 
+				  column="EXCEPTION_CODE" />
+		<many-to-one name="status" class="org.easysdi.monitor.biz.job.Status" 
+					 column="ID_STATUS" />
+	</class>
+</hibernate-mapping>

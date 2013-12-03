@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fileset-config file-format-version="1.2.0" simple-config="true">
+    <fileset name="tous" enabled="true" check-config-name="arx iT" local="false">
+        <file-match-pattern match-pattern="." include-pattern="true"/>
+    </fileset>
+    <filter name="FilesFromPackage" enabled="true">
+        <filter-data value="src/org/deegree"/>
+        <filter-data value="src/org/deegree/datatypes"/>
+        <filter-data value="src/org/deegree/datatypes/xlink"/>
+        <filter-data value="src/org/deegree/enterprise"/>
+        <filter-data value="src/org/deegree/framework"/>
+        <filter-data value="src/org/deegree/framework/jndi"/>
+        <filter-data value="src/org/deegree/framework/log"/>
+        <filter-data value="src/org/deegree/framework/mail"/>
+        <filter-data value="src/org/deegree/framework/util"/>
+        <filter-data value="src/org/deegree/framework/version"/>
+        <filter-data value="src/org/deegree/framework/xml"/>
+        <filter-data value="src/org/deegree/i18n"/>
+        <filter-data value="src/org/deegree/model"/>
+        <filter-data value="src/org/deegree/model/feature"/>
+        <filter-data value="src/org/deegree/ogcbase"/>
+        <filter-data value="src/org/deegree/ogcwebservices"/>
+        <filter-data value="src/org/deegree/portal"/>
+        <filter-data value="src/org/deegree/portal/owswatch"/>
+        <filter-data value="src/org/deegree/portal/owswatch/validator"/>
+        <filter-data value="src/org/json"/>
+    </filter>
+    <filter name="NonSrcDirs" enabled="true"/>
+</fileset-config>

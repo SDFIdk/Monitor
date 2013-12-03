@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.easysdi.monitor.biz.job">
+	<class name="QueryValidationSettings" table="query_validation_settings"
+		lazy="false">
+		<id name="queryValidationSettingsId" column="ID_QUERY_VALIDATION_SETTINGS"
+			type="long">
+			<generator class="org.hibernate.id.enhanced.TableGenerator">
+				<param name="table_name">last_ids</param>
+				<param name="value_column_name">LAST_ID</param>
+				<param name="segment_column_name">TABLE_NAME</param>
+				<param name="segment_value">QUERY_VALIDATION_SETTINGS</param>
+				<param name="initial_value">1</param>
+				<param name="increment_size">1</param>
+			</generator>
+		</id>
+
+		<many-to-one name="parentQuery" class="Query" column="ID_QUERY"
+			lazy="false" insert="false" update="false"></many-to-one>
+
+
+		<property name="queryId" type="long" column="ID_QUERY" />
+
+		<property name="useSizeValidation" type="boolean" column="USE_SIZE_VALIDATION" />
+		<property name="normSize" type="long" column="NORM_SIZE" />
+		<property name="normSizeTolerance" type="float" column="NORM_SIZE_TOLERANCE" />
+		<property name="useTimeValidation" type="boolean" column="USE_TIME_VALIDATION" />
+		<property name="normTime" type="float" column="NORM_TIME" />
+		<property name="useXpathValidation" type="boolean"
+			column="USE_XPATH_VALIDATION" />
+		<property name="xpathExpression" type="string" column="XPATH_EXPRESSION" />
+		<property name="expectedXpathOutput" type="string"
+			column="XPATH_EXPECTED_OUTPUT" />
+		<property name="useTextValidation" type="boolean"
+			column="USE_TEXT_VALIDATION" />
+		<property name="expectedTextMatch" type="string"
+			column="TEXT_EXPECTED_MATCH" />
+
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+			 xmlns:beans="http://www.springframework.org/schema/beans" 
+			 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+              http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-2.0.4.xsd">
+
+	<http realm="Monitor" create-session="never" 
+	      entry-point-ref="authenticationEntryPoint" auto-config="true">
+	    <intercept-url pattern="/adminJobs" access="ROLE_ADMIN" />
+	    <intercept-url pattern="/adminJobs/**" access="ROLE_ADMIN" />
+		<intercept-url pattern="/jobs" method="POST" access="ROLE_ADMIN" />
+		<intercept-url pattern="/jobs/*" method="PUT" access="ROLE_ADMIN" />
+		<intercept-url pattern="/jobs/*" method="DELETE" access="ROLE_ADMIN" />
+		<intercept-url pattern="/jobs/*/queries" method="POST" access="ROLE_ADMIN" />
+		<intercept-url pattern="/jobs/*/queries/*" method="PUT" access="ROLE_ADMIN" />
+		<intercept-url pattern="/jobs/*/queries/*" method="DELETE" access="ROLE_ADMIN" />
+		<intercept-url pattern="/jobs/*/logs" method="DELETE" access="ROLE_ADMIN" />
+		<intercept-url pattern="/jobs/*/agglogs" method="DELETE" access="ROLE_ADMIN" />
+		<intercept-url pattern="/jobs/*/queries/*/logs" method="DELETE" access="ROLE_ADMIN" />
+		<intercept-url pattern="/jobs/*/queries/*/agglogs" method="DELETE" access="ROLE_ADMIN" />
+		<intercept-url pattern="/jobs/*/queries/*/params" method="POST" access="ROLE_ADMIN" />
+		<intercept-url pattern="/jobs/*/queries/*/params" method="PUT" access="ROLE_ADMIN" />
+		<intercept-url pattern="/jobs/*/actions" method="GET" access="ROLE_ADMIN" />
+		<intercept-url pattern="/jobs/*/actions" method="POST" access="ROLE_ADMIN" />
+		<intercept-url pattern="/jobs/*/actions/*" method="GET" access="ROLE_ADMIN" />
+		<intercept-url pattern="/jobs/*/actions/*" method="PUT" access="ROLE_ADMIN" />
+		<intercept-url pattern="/jobs/*/actions/*" method="DELETE" access="ROLE_ADMIN" />
+		<http-basic />
+	</http>
+
+	<authentication-provider user-service-ref="monitorUserDetailsService" />
+	
+	<beans:bean id="monitorUserDetailsService"
+		class="org.easysdi.monitor.biz.security.springsecurity.UserAuthDetailsService">
+	</beans:bean>
+	
+	<beans:bean id="authenticationEntryPoint"
+		class="org.springframework.security.ui.basicauth.BasicProcessingFilterEntryPoint">
+		<beans:property name="realmName">
+			<beans:value>Monitor</beans:value>
+		</beans:property>
+	</beans:bean>
+</beans:beans>

@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.easysdi.monitor.biz.logging">
+  <class name="JobAggregateHourLogEntry" table="job_agg_hour_log_entries">
+  	<composite-id>
+  		<key-property name="logDate" type="calendar" column="DATE_LOG"></key-property>
+  		<key-property name="jobId" type="long" column="ID_JOB"></key-property>
+  	</composite-id>
+  	<component name="h1Stats" class="AggregateStats">
+	  	<property name="meanRespTime" type="float" column="H1_MEAN_RESP_TIME"></property>
+	  	<property name="availability" type="float" column="H1_AVAILABILITY"></property>
+	  	<property name="nbBizErrors" type="int" column="H1_NB_BIZ_ERRORS"></property>
+	  	<property name="nbConnErrors" type="int" column="H1_NB_CONN_ERRORS"></property>
+	  	<property name="maxRespTime" type="float" column="H1_MAX_RESP_TIME"></property>
+	  	<property name="minRespTime" type="float" column="H1_MIN_RESP_TIME"></property>
+	  	<property name="unavailability" type="float" column="H1_UNAVAILABILITY"></property>
+	  	<property name="failure" type="float" column="H1_FAILURE"></property>
+	  	<property name="untested" type="float" column="H1_UNTESTED"></property>
+  	</component>
+  	<component name="inspireStats" class="AggregateStats">
+	  	<property name="meanRespTime" type="float" column="H1_MEAN_RESP_TIME_INSPIRE"></property>
+	  	<property name="availability" type="float" column="H1_AVAILABILITY_INSPIRE"></property>
+	  	<property name="nbBizErrors" type="int" column="H1_NB_BIZ_ERRORS_INSPIRE"></property>
+	  	<property name="nbConnErrors" type="int" column="H1_NB_CONN_ERRORS_INSPIRE"></property>
+	  	<property name="maxRespTime" type="float" column="H1_MAX_RESP_TIME_INSPIRE"></property>
+	  	<property name="minRespTime" type="float" column="H1_MIN_RESP_TIME_INSPIRE"></property>
+	  	<property name="unavailability" type="float" column="H1_UNAVAILABILITY_INSPIRE"></property>
+  		<property name="failure" type="float" column="H1_FAILURE_INSPIRE"></property>
+  		<property name="untested" type="float" column="H1_UNTESTED_INSPIRE"></property>
+  	</component>
+  </class>
+</hibernate-mapping>

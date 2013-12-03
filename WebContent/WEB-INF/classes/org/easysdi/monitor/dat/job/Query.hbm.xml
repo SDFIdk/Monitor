@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.easysdi.monitor.biz.job">
+	<class name="Query" table="queries" lazy="false">
+		<id name="queryId" type="long" column="ID_QUERY">
+			<generator class="org.hibernate.id.enhanced.TableGenerator">
+				<param name="table_name">last_ids</param>
+				<param name="value_column_name">LAST_ID</param>
+				<param name="segment_column_name">TABLE_NAME</param>
+				<param name="segment_value">QUERIES</param>
+				<param name="initial_value">1</param>
+				<param name="increment_size">1</param>
+			</generator>
+		</id>
+		<many-to-one name="status" column="ID_STATUS" class="Status" not-null="true"></many-to-one>
+		
+		<!--Validation settings for a query -->
+		<one-to-one name="queryValidationSettings" class="QueryValidationSettings"  property-ref="queryId" cascade="delete"  />	
+		<one-to-one name="queryValidationResult" class="QueryValidationResult" property-ref="queryId" cascade="delete" />	
+		
+		<component name="config" class="QueryConfiguration" lazy="false">
+			<parent name="query" />
+			<property name="name" type="string" length="45" column="NAME" lazy="false"></property>
+			<property name="soapUrl" type="string" length="250" column="SOAP_URL" lazy="false"></property>
+			<property name="queryMethod" type="string" length="20" column="QUERY_METHOD" lazy="false"></property>
+			<property name="queryServiceType" type="string" length="20" column="QUERY_SERVICE_TYPE" lazy="false"></property>
+			<many-to-one name="parentJob" class="Job" column="ID_JOB" lazy="false"></many-to-one>
+			<property name="methodId" type="long" column="ID_SERVICE_METHOD" lazy="false"></property>
+		    <property name="url" column="QUERY_URL" type="string" length="255" lazy="false"></property>
+		    <property name="login" column="LOGIN" type="string" length="45" lazy="false"></property>
+		    <property name="password" column="PASSWORD" type="string" length="45" lazy="false"></property>
+			<set name="params" table="query_params" inverse="true" lazy="false" cascade="all-delete-orphan">
+				<key column="ID_QUERY"></key>
+				<one-to-many class="QueryParam" />
+			</set>
+		</component>
+	</class>
+</hibernate-mapping>

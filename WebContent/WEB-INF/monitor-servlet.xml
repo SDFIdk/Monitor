@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+						http://www.springframework.org/schema/beans
+						http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+						http://www.springframework.org/schema/context 
+        				http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        				http://www.springframework.org/schema/tx 
+        				http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+       					http://www.springframework.org/schema/aop 
+       					http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+       					http://www.springframework.org/schema/util
+       					http://www.springframework.org/schema/util/spring-util-3.0.xsd
+       					">
+
+	<!-- Gestion des propriétés pour ce fichier de configuration -->
+	<context:property-placeholder location="WEB-INF/monitor-config.properties" />
+
+	<!-- Locale beans -->
+	<bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+		<property name="paramName" value="lang" />
+	</bean>
+
+	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver" />
+
+	<!-- MVC Handler mapping -->
+
+	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+		<property name="interceptors">
+			<list>
+				<ref bean="localeChangeInterceptor"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="messageConverters">
+		    <util:list id="beanList">
+				<ref bean="formHttpMessageConverter" />
+				<ref bean="mappingJacksonHttpMessageConverter" />
+		    </util:list>
+		</property>
+	</bean>
+	
+	<bean id="formHttpMessageConverter" 
+         class="org.springframework.http.converter.FormHttpMessageConverter" />
+         
+    <bean id="mappingJacksonHttpMessageConverter"
+    	  class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
+	
+
+
+	<!-- MVC View Resolvers -->
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.XmlViewResolver">
+		<property name="location" value="/WEB-INF/views.xml"></property>
+	</bean>
+
+
+	<!-- MVC Controllers -->
+	<context:component-scan base-package="org.easysdi.monitor.gui.webapp.controllers" />
+	
+	<!-- Jackson -->
+	<bean id="jsonMapper" class="org.codehaus.jackson.map.ObjectMapper" />
+	
+
+
+	<!-- Hibernate beans -->
+
+	<bean id="hibernateDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass"><value>${jdbc.driver}</value></property>
+		<property name="jdbcUrl"><value>${jdbc.url}</value></property>
+		<property name="user"><value>${jdbc.user}</value></property>
+		<property name="password"><value>${jdbc.password}</value></property>
+		<property name="initialPoolSize"><value>${hibernate.c3p0.initialPoolSize}</value></property> 
+		<property name="minPoolSize"><value>${hibernate.c3p0.minPoolSize}</value></property> 
+		<property name="maxPoolSize"><value>${hibernate.c3p0.maxPoolSize}</value></property> 
+		<property name="acquireRetryAttempts"><value>${hibernate.c3p0.acquireRetryAttempts}</value></property> 
+		<property name="acquireIncrement"><value>${hibernate.c3p0.acquireIncrement}</value></property> 
+		<property name="idleConnectionTestPeriod"><value>${hibernate.c3p0.idleConnectionTestPeriod}</value></property> 
+		<property name="maxIdleTime"><value>${hibernate.c3p0.maxIdleTime}</value></property> 
+		<property name="maxConnectionAge"><value>${hibernate.c3p0.maxConnectionAge}</value></property> 
+		<property name="preferredTestQuery"><value>${hibernate.c3p0.preferredTestQuery}</value></property> 
+		<property name="testConnectionOnCheckin"><value>${hibernate.c3p0.testConnectionOnCheckin}</value></property>
+	</bean>
+
+	<bean id="hibernateSessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource" ref="hibernateDataSource" />
+		<property name="mappingResources">
+			<list>
+				<value>org/easysdi/monitor/dat/alert/Action.hbm.xml</value>
+				<value>org/easysdi/monitor/dat/alert/ActionType.hbm.xml</value>
+				<value>org/easysdi/monitor/dat/alert/Alert.hbm.xml</value>
+				<value>org/easysdi/monitor/dat/job/HttpMethod.hbm.xml</value>
+				<value>org/easysdi/monitor/dat/logging/JobAggregateLogEntry.hbm.xml</value>
+				<value>org/easysdi/monitor/dat/job/Job.hbm.xml</value>
+				<value>org/easysdi/monitor/dat/job/JobDefaultParameter.hbm.xml</value>
+				<value>org/easysdi/monitor/dat/job/Query.hbm.xml</value>
+				<value>org/easysdi/monitor/dat/job/QueryParam.hbm.xml</value>
+				<value>org/easysdi/monitor/dat/logging/QueryAggregateLogEntry.hbm.xml</value>
+				<value>org/easysdi/monitor/dat/logging/RawLogEntry.hbm.xml</value>
+				<value>org/easysdi/monitor/dat/security/Role.hbm.xml</value>
+				<value>org/easysdi/monitor/dat/job/ServiceMethod.hbm.xml</value>
+				<value>org/easysdi/monitor/dat/job/ServiceType.hbm.xml</value>
+				<value>org/easysdi/monitor/dat/job/ServiceTypeMethod.hbm.xml</value>
+				<value>org/easysdi/monitor/dat/job/Status.hbm.xml</value>
+				<value>org/easysdi/monitor/dat/security/User.hbm.xml</value>
+			    <value>org/easysdi/monitor/dat/job/Overview.hbm.xml</value>
+				<value>org/easysdi/monitor/dat/job/OverviewQuery.hbm.xml</value>
+				<value>org/easysdi/monitor/dat/job/OverviewQueryView.hbm.xml</value>
+				<value>org/easysdi/monitor/dat/job/OverviewLastQuery.hbm.xml</value>
+				<value>org/easysdi/monitor/dat/job/QueryValidationResult.hbm.xml</value>
+				<value>org/easysdi/monitor/dat/job/QueryValidationSettings.hbm.xml</value>
+				<value>org/easysdi/monitor/dat/job/Sla.hbm.xml</value>
+				<value>org/easysdi/monitor/dat/job/Period.hbm.xml</value>
+				<value>org/easysdi/monitor/dat/job/Holiday.hbm.xml</value>
+				<value>org/easysdi/monitor/dat/logging/JobAggregateHourLogEntry.hbm.xml</value>
+				<value>org/easysdi/monitor/dat/logging/QueryAggregateHourLogEntry.hbm.xml</value>
+				<value>org/easysdi/monitor/dat/job/QueryTestResult.hbm.xml</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.default_catalog">${hibernate.defaultCatalog}</prop>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="cache.provider_class">org.hibernate.cache.NoCacheProvider</prop>
+				<prop key="hibernate.c3p0.acquire_increment">${hibernate.c3p0.acquireIncrement}</prop> 
+				<prop key="hibernate.c3p0.idle_test_period">${hibernate.c3p0.idleConnectionTestPeriod}</prop> 
+				<prop key="hibernate.c3p0.timeout">${hibernate.c3p0.maxIdleTime}</prop> 
+				<prop key="hibernate.c3p0.max_size">${hibernate.c3p0.maxPoolSize}</prop> 
+				<prop key="hibernate.c3p0.min_size">${hibernate.c3p0.minPoolSize}</prop>
+				
+      		</props>
+		</property>
+	</bean>
+
+
+	<!-- Transaction management -->
+	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="hibernateSessionFactory" />
+	</bean>
+
+	<aop:config>
+		 <aop:pointcut id="controllerMethod" 
+		 	expression="execution(public org.springframework.web.servlet.ModelAndView org.easysdi.monitor.gui.webapp.controllers.*Controller.*(..))" />
+		 <aop:advisor advice-ref="controllerTransactionAdvice" pointcut-ref="controllerMethod" />
+	</aop:config>
+
+	<tx:advice id="controllerTransactionAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="create" propagation="REQUIRED" />
+			<tx:method name="show" read-only="true" propagation="REQUIRED" />
+		</tx:attributes>
+	</tx:advice>
+
+
+	<!-- Generic DAO objects -->
+	<bean id="actionDao" class="org.easysdi.monitor.dat.dao.hibernate.ActionDao">
+		<constructor-arg ref="hibernateSessionFactory"></constructor-arg>
+	</bean>
+	
+	<bean id="alertDao" class="org.easysdi.monitor.dat.dao.hibernate.AlertDao">
+		<constructor-arg ref="hibernateSessionFactory" />
+	</bean>
+
+	<bean id="jobDao" class="org.easysdi.monitor.dat.dao.hibernate.JobDao">
+		<constructor-arg ref="hibernateSessionFactory" />
+		<property name="txManager" ref="transactionManager"></property>
+	</bean>
+
+	<bean id="logDao" class="org.easysdi.monitor.dat.dao.hibernate.LogDao">
+		<constructor-arg ref="hibernateSessionFactory" />
+	</bean>
+
+	<bean id="queryDao" class="org.easysdi.monitor.dat.dao.hibernate.QueryDao">
+		<constructor-arg ref="hibernateSessionFactory" />
+	</bean>
+
+	<bean id="serviceDao" class="org.easysdi.monitor.dat.dao.hibernate.ServiceDao">
+		<constructor-arg ref="hibernateSessionFactory" />
+	</bean>
+
+	<bean id="userDao" class="org.easysdi.monitor.dat.dao.hibernate.UserDao">
+		<constructor-arg ref="hibernateSessionFactory" />
+		<property name="txManager" ref="transactionManager"></property>
+	</bean>
+
+	<bean id="valueObjectDao" class="org.easysdi.monitor.dat.dao.hibernate.ValueObjectDao">
+		<constructor-arg ref="hibernateSessionFactory" />
+	</bean>
+	
+	 <bean id="overviewDao" class="org.easysdi.monitor.dat.dao.hibernate.OverviewDao">
+		<constructor-arg ref="hibernateSessionFactory" />
+	<!-- 	<property name="txManager" ref="transactionManager"></property> -->
+	</bean>
+
+    <bean id="overviewQueryDao" class="org.easysdi.monitor.dat.dao.hibernate.OverviewQueryDao">
+		<constructor-arg ref="hibernateSessionFactory" />
+		<!-- <property name="txManager" ref="transactionManager"></property> -->
+	</bean>
+
+    <bean id="overviewQueryViewDao" class="org.easysdi.monitor.dat.dao.hibernate.OverviewQueryViewDao">
+		<constructor-arg ref="hibernateSessionFactory" />
+	<!-- 	<property name="txManager" ref="transactionManager"></property> -->
+	</bean>
+	
+	<bean id="lastLogDao" class="org.easysdi.monitor.dat.dao.hibernate.LastLogDao">
+		<constructor-arg ref="hibernateSessionFactory" />
+	</bean>
+	
+	<bean id="queryValidationSettingsDao" class="org.easysdi.monitor.dat.dao.hibernate.QueryValidationSettingsDao">
+		<constructor-arg ref="hibernateSessionFactory" />
+	</bean>
+
+	<bean id="queryValidationResultDao" class="org.easysdi.monitor.dat.dao.hibernate.QueryValidationResultDao">
+		<constructor-arg ref="hibernateSessionFactory" />
+		
+	</bean>
+	
+	<bean id="slaDao" class="org.easysdi.monitor.dat.dao.hibernate.SlaDao">
+		<constructor-arg ref="hibernateSessionFactory" />
+	</bean>
+	<bean id="periodDao" class="org.easysdi.monitor.dat.dao.hibernate.PeriodDao">
+		<constructor-arg ref="hibernateSessionFactory" />
+	</bean>
+	<bean id="holidayDao" class="org.easysdi.monitor.dat.dao.hibernate.HolidayDao">
+		<constructor-arg ref="hibernateSessionFactory" />
+	</bean>
+	<bean id="queryTestResultDao" class="org.easysdi.monitor.dat.dao.hibernate.QueryTestResultDao">
+		<constructor-arg ref="hibernateSessionFactory" />
+	</bean>
+	
+	<!-- Scheduler beans -->
+	<bean id="logAggregationJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+		<property name="jobClass" value="org.easysdi.monitor.biz.job.auto.quartz.AggregatorJob"></property>
+		<property name="jobDataAsMap">
+			<map>
+			</map>
+		</property>
+	</bean>
+
+	<bean id="immediateLogAggregationTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail" ref="logAggregationJob"></property>
+		<property name="startDelay" value="30000"></property>
+		<property name="repeatInterval" value="3600000"></property>
+		<property name="repeatCount" value="1"></property>
+	</bean>
+
+
+	<bean id="regularLogAggregationTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="logAggregationJob" />
+		<property name="cronExpression" value="0 0 0 * * ?" />
+	</bean>
+
+	<bean id="quartzScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="immediateLogAggregationTrigger" />
+				<ref bean="regularLogAggregationTrigger" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="schedulerHelper" class="org.easysdi.monitor.biz.job.auto.quartz.QuartzScheduler"
+		init-method="scheduleAllJobs">
+		<property name="scheduler" ref="quartzScheduler" />
+	</bean>
+
+
+	<!-- Application context beans -->
+	<bean id="appContext" class="org.easysdi.monitor.gui.webapp.ApplicationContextProvider" />
+</beans>

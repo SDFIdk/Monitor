@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.easysdi.monitor.biz.security">
+	<class name="User" table="users" lazy="false">
+		<id name="login" column="LOGIN" type="string" length="45">
+			<generator class="assigned">
+			</generator>
+		</id>
+		<property name="password" column="PASSWORD" type="string" length="45" lazy="false"></property>
+		<property name="expirationDate" column="EXPIRATION" type="calendar_date" lazy="false"></property>
+		<property name="enabled" column="ENABLED" type="boolean" lazy="false"></property>
+		<property name="locked" column="LOCKED" type="boolean" lazy="false"></property>
+		<many-to-one name="role" column="ID_ROLE" class="Role" lazy="false"></many-to-one>
+	</class>
+</hibernate-mapping>

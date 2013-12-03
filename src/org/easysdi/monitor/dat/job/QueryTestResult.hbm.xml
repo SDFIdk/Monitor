@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.easysdi.monitor.biz.job">
+	<class name="QueryTestResult" table="query_test_result" lazy="false">
+		<id name="queryid" type="long" column="ID_QUERY" />
+		<property name="data" type="binary" column="DATA" />
+		<property name="contentType" type="text" column="CONTENT_TYPE" />
+		<property name="xpathresult" type="text" column="XPATH_RESULT" />
+		<property name="responseDelay" type="float" column="RESPONSE_DELAY" />
+		<property name="responseSize" type="long" column="RESPONSE_SIZE" />
+	</class>
+</hibernate-mapping>

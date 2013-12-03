@@ -1,0 +1,161 @@
+action.argument.illegal = L'un des arguments de l'action contient une valeur illégale
+action.create.error = Une erreur s'est produite lors de la création de l'action
+action.create.success = L'action a bien été créée
+action.delete.error = Impossible de supprimer l'action
+action.delete.success = L'action a bien été supprimée
+action.details.success = Les détails de l'action ont bien été récupérés
+action.json.error = Une erreur s'est produite lors de la représentation de l'action
+action.modify.error = Impossible de modifier l'action
+action.modify.success = L'action a bien été modifiée
+action.persist.error = Une erreur a empêché l'enregistrement de l'action
+
+actionsCollection.details.success = Le détail de la collection d'actions a bien été récupéré
+actionsCollection.json.error = Une erreur s'est produite lors de la représentation de la collection d'action
+
+alert.fetch.error = Une erreur s'est produite lors de la récupération des alertes
+alert.json.error = Une erreur s'est produite lors de la représentation des alertes
+alert.rss.description = Ce feed indique les dernières alertes déclenchées par le job n°%1$d de surveillance d'un service web OGC
+alert.rss.error = Une erreur s'est produite lors de l'écriture du flux RSS
+alert.rss.item.description = Le job n°%1$d (%2$s) est passé du statut %3$s à %4$s. La cause est '%5$s'.
+alert.rss.item.title = Le statut du job a changé
+alert.rss.title = Alertes Monitor pour le job n°%1$d
+
+alertsCollection.details.success = Les alertes ont bien été récupérées
+
+error.json.error = Impossible de convertir l'erreur en JSON
+
+general.cause = Cause
+general.jobId = Identifiant du job
+general.jobName = Nom du job
+general.newStatus = Nouveau statut
+general.oldStatus = Ancien statut
+
+internal.error = Une erreur interne s'est produite
+
+insufficient.rights = Vous n'avez pas les droits nécessaires pour accéder à cette ressource
+
+job.argument.illegal = L'un des arguments du job contient une valeur illégale
+job.create.error = Impossible de créer le job
+job.create.success = Le job a bien été créé
+job.delete.error = Impossible de supprimer le job
+job.delete.success = Le job a bien été supprimé
+job.details.success = Les détails du job ont bien été récupérés
+job.json.error = Une erreur s'est produite lors de la représentation du job
+job.modify.error = Impossible de modifier le job
+job.modify.success = Le job a bien été modifié
+job.noResult = Le job n'a produit aucun résultat (probablement parce qu'aucune query n'est définie)
+job.notExist = Le job n'existe pas
+job.persist.error = Une erreur a empêché de sauvegarder le job
+job.realtime.notAllowed = Ce job n'autorise pas l'exécution en temps réél
+
+
+jobDefault.argument.illegal = L'un des paramètres contient une valeur illégale
+jobDefault.modify.error = Impossible de modifier un paramètre par défaut 
+jobDefault.persist.error = Une erreur a empêché de sauvegarder un paramètre par défaut 
+jobDefault.json.error = Une erreur s'est produite lors de la représentation des paramètres par défaut
+
+jobDefaultsCollection.details.success = Le détail des paramètres par défaut des jobs a bien été récupéré
+jobDefaultsCollection.modify.success = Les paramètres par défaut des jobs ont bien été modifiés
+
+overviewsCollection.details.success= Overview parameter details was successfully retrieved
+overviews.details.success= Overview parameter details was successfully retrieved
+overviewpage.create.success= The overview was successfully created
+overview.delete.success= The overview was successfully deleted
+overview.delete.error= An error occurred while deleting the overview
+overview.modify.success = The overview was updated successfully
+overview.modify.error = Unable to update the overview
+overviewQuery.modify.success = The overviewQuery was updated successfully
+overviewQuery.details.success= Overview query details was successfully retrieved
+overviewQueryCollection.details.success = Overview query details was successfully retrieved
+overview.notExist=The overview with the given key was not found
+
+jobResult.execution.error = Une erreur s'est produite lors de l'execution du job
+jobResult.execution.success = L'execution du job s'est bien déroulée
+jobResult.json.error = Une erreur s'est produite lors de la représentation du résultat de l'exécution
+
+jobsCollection.details.success = Le contenu de la collection de jobs a bien été récupéré
+jobsCollection.json.error = Une erreur s'est produite lors de la représentation de la collection
+
+language.resource.missing = Impossible d'afficher les informations dans la langue demandée
+
+log.details.success = Les logs ont bien été récupérés
+log.fetch.error = Une erreur s'est produite lors de la récupération des logs
+log.header.date = Date
+log.header.dateTime = Heure de la requête
+log.header.h24.availability = Disponibilité H24
+log.header.h24.meanRespTime = Temps de réponse moyen H24
+log.header.h24.nbBizErrors = Nb erreurs business H24
+log.header.h24.nbConnErrors = Nb erreurs HTTP H24
+log.header.message = Message
+log.header.queryId = Id de la query
+log.header.respDelay = Temps de réponse
+log.header.sla.availability = Disponibilité SLA
+log.header.sla.meanRespTime = Temps de réponse moyen SLA
+log.header.sla.nbBizErrors = Nb erreurs business SLA
+log.header.sla.nbConnErrors = Nb erreurs HTTP SLA
+log.header.status = Statut
+log.minDate.invalid = Le format de la date minimale est invalide
+log.maxDate.invalid = Le format de la date maximale est invalide
+log.minDate.illegal = Le format de la date minimale est invalide
+log.maxDate.illegal = Le format de la date maximale est invalide
+log.maxDate.mandatory = La date maximale est obligatoire pour cette opération
+log.maxResults.illegal = Le format du nombre de résultats maximum est invalide
+log.startIndex.illegal = Le format de l'index de départ est invalide
+log.purge.error = Une erreur s'est produite lors de la purge des logs
+log.purge.success = Les logs ont été correctement purgés
+
+logsCollection.json.error = Une erreur s'est produite lors de la représentation des logs 
+
+mail.subject.automatic = Alerte 
+mail.subject.statusChanged = statut
+mail.body.dateTimeChange = Date et heure du changement
+mail.body.greetings = Meilleures salutations
+mail.body.noAnswer = ** NE PAS REPONDRE A CE MESSAGE. IL VOUS A ETE ENVOYE DE FACON AUTOMATIQUE **
+mail.body.statusChanged = MONITOR vous informe d'un changement de statut pour le job:.
+
+message.json.error = Une erreur s'est produite lors de la représentation du message d'information
+
+query.argument.illegal = L'un des arguments de la query contient une valeur illégale
+query.create.error = Impossible de créer la query
+query.create.success = La query a bien été créée
+query.details.success = Les détails de la query ont bien été récupérés
+query.delete.error = Impossible de supprimer la query
+query.delete.success = La query a bien été supprimée
+query.json.error = Une erreur s'est produite lors de la représentation de la query
+query.modify.error = Impossible de modifier la query
+query.modify.success = La query a bien été modifiée
+query.notExist = La query n'existe pas
+query.persist.error = Une erreur a empêché de sauvegarder la query
+
+queriesCollection.details.success = Le détail de la collection de queries a bien été récupéré
+queriesCollection.json.error = Une erreur s'est produite lors de la représentation de la collection
+
+queryParams.define.success = Les paramètres de la query ont bien été définis
+queryParams.details.success = Le détail des paramètres de la query ont bien été récupérés
+queryParams.delete.error = Une erreur s'est produite lors de la suppression d'un paramètre de la query
+queryParams.json.error = Une erreur s'est produite lors de la représentation des paramètres de la query
+queryParams.modify.error = Une erreur s'est produite lors de la modification des paramètres de la query
+queryParams.modify.notExist = L'un des paramètres à modifier n'existe pas
+queryParams.modify.success = Les paramètres de la query ont bien été modifiés
+
+queryValidationSettings.modify.success=The validation settings for the query were successfully updated
+
+request.processing.error = Une erreur s'est produite pendant le traitement de votre requête
+
+response.write.error = Une erreur s'est produite lors de l'écriture de la réponse
+
+resource.protected = Cette ressource est protégée
+
+respTime.fetch.error = Une erreur s'est produite lors de la récupération des temps de réponse
+respTime.header.dateTime = Heure de la requête
+respTime.header.queryId = Id de la query
+respTime.header.respDelay = Temps de réponse
+respTime.json.error = Une erreur s'est produite lors de la représentation des temps de réponse
+
+status.available = Disponible
+status.invalid = (ERREUR: Statut non valide)
+status.not_tested = Non testé
+status.out_of_order = En dérangement
+status.unavailable = Indisponible
+
+result.modify.success = Les paramètres ont bien été modifiés

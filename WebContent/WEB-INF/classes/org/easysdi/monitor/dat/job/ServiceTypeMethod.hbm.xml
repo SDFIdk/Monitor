@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.easysdi.monitor.biz.job">
+  <class name="ServiceTypeMethod" table="service_types_methods">
+  	<composite-id>
+  		<key-property name="serviceTypeId" column="ID_SERVICE_TYPE" type="long"></key-property>
+  		<key-property name="serviceMethodId" column="ID_SERVICE_METHOD" type="long"></key-property>
+  	</composite-id>
+  </class>
+</hibernate-mapping>

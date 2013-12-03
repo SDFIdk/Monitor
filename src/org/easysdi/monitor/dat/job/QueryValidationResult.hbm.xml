@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.easysdi.monitor.biz.job">
+	<class name="QueryValidationResult" table="query_validation_results" 
+		lazy="false"  >
+		<id name="queryValidationResultId" column="ID_QUERY_VALIDATION_RESULT"
+			type="long">
+			<generator class="org.hibernate.id.enhanced.TableGenerator">
+				<param name="table_name">last_ids</param>
+				<param name="value_column_name">LAST_ID</param>
+				<param name="segment_column_name">TABLE_NAME</param>
+				<param name="segment_value">QUERY_VALIDATION_RESULTS</param>
+				<param name="initial_value">1</param>
+				<param name="increment_size">1</param>
+			</generator>
+		</id>
+
+		<many-to-one name="parentQuery" class="Query" column="ID_QUERY"
+			lazy="false" insert="false" update="false" cascade="all" unique="true"></many-to-one>
+
+
+		<property name="queryId" type="long" column="ID_QUERY" unique="true" />
+
+		<property name="sizeValidationResult" type="boolean" column="SIZE_VALIDATION_RESULT" />
+		<property name="responseSize" type="long" column="RESPONSE_SIZE" />
+		<property name="timeValidationResult" type="boolean" column="TIME_VALIDATION_RESULT" />
+		<property name="deliveryTime" type="float" column="DELIVERY_TIME" />
+		<property name="xpathValidationResult" type="boolean" column="XPATH_VALIDATION_RESULT" />
+		<property name="xpathValidationOutput" type="string" column="XPATH_VALIDATION_OUTPUT" />
+
+	</class>
+</hibernate-mapping>

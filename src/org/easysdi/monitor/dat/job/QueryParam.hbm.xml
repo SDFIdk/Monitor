@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.easysdi.monitor.biz.job">
+  <class name="QueryParam" table="query_params" lazy="false">
+  	<composite-id>
+  		<key-property name="parentQueryId" type="long" column="ID_QUERY"></key-property>
+  		<key-property name="name" type="string" length="45" column="NAME"></key-property>
+  	</composite-id>
+  	<property name="value" type="text" column="VALUE" lazy="false"></property>
+  </class>
+</hibernate-mapping>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Monitor" default="war" basedir=".">
+	<description>Builds the EasySDI Monitor project</description>
+	
+	<property name="i18ndir" 
+			  location="${basedir}/src/org/easysdi/monitor/gui/i18n" />
+	<property name="war.name" value="${ant.project.name}.war" />
+			  
+	<target name="convertI18n" 
+			description="Generates the ASCII localization files">
+		<echo message="Converting the UTF-8 language files" level="info" />
+		<native2ascii encoding="UTF8" src="${i18ndir}" dest="${i18ndir}" 
+					  includes="*.utf8" ext="" />
+		<echo message="Language files converted" level="info" />
+	</target>
+	
+	<target name="compile" depends="convertI18n">
+		<echo message="Compiling the application" level="info" />
+		<javac debug="true" srcdir="${basedir}/src" target="1.5" includeAntRuntime="false"
+			   destdir="${basedir}/WebContent/WEB-INF/classes" 
+			   compiler="javac1.5" source="1.5" />
+		<echo message="Compilation successful" level="info" />
+	</target>
+	
+	<target name="war" depends="compile" 
+			description="Builds a WAR file for deployement">
+		<echo message="Generating the WAR file" level="info" />
+		<war destfile="${basedir}/out/${ant.project.name}.war" 
+		     basedir="${basedir}/WebContent"
+			 webxml="${basedir}/WebContent/WEB-INF/web.xml" />
+		<echo message="WAR file generated" level="info" />
+	</target>
+</project> 

@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.easysdi.monitor.biz.job">
+	<class name="Overview" table="overview_page" lazy="false">
+		<id name="overviewID" column="ID_OVERVIEW_PAGE" type="long">
+			<generator class="org.hibernate.id.enhanced.TableGenerator">
+				<param name="table_name">last_ids</param>
+				<param name="value_column_name">LAST_ID</param>
+				<param name="segment_column_name">TABLE_NAME</param>
+				<param name="segment_value">OVERVIEW_PAGE</param>
+				<param name="initial_value">1</param>
+				<param name="increment_size">1</param>
+			</generator>
+		</id>
+		<property name="name" type="string" length="255" column="NAME" />
+		<property name="isPublic" type="boolean" column="IS_PUBLIC"
+			lazy="false" />
+		<map name="overviewQueries" table="overview_queries" lazy="false"
+			cascade="all-delete-orphan" inverse="true">
+			<key column="ID_OVERVIEW_PAGE" not-null="true"></key>
+			<map-key type="long" column="ID_OVERVIEW_QUERY"></map-key>
+			<one-to-many class="OverviewQuery" />
+		</map>
+
+	</class>
+</hibernate-mapping>

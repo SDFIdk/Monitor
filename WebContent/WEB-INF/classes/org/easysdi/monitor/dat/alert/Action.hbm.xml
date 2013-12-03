@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.easysdi.monitor.biz.alert">
+	<class name="AbstractAction" abstract="true" table="actions">
+		<id name="actionId" type="long" column="ID_ACTION">
+			<generator class="org.hibernate.id.enhanced.TableGenerator">
+				<param name="table_name">last_ids</param>
+				<param name="value_column_name">LAST_ID</param>
+				<param name="segment_column_name">TABLE_NAME</param>
+				<param name="segment_value">ACTIONS</param>
+				<param name="initial_value">1</param>
+				<param name="increment_size">1</param>
+			</generator>
+		</id>
+		<discriminator type="string">
+			<formula>
+				(SELECT AT.NAME 
+				 FROM action_types AT 
+				 WHERE AT.ID_ACTION_TYPE = ID_ACTION_TYPE)
+		    </formula>
+		</discriminator>
+		<many-to-one name="parentJob" class="org.easysdi.monitor.biz.job.Job" 
+					 column="ID_JOB">
+		</many-to-one>
+		<property name="target" type="string" length="255" column="TARGET"></property>
+		<property name="language" type="string" length="2" column="LANGUAGE"></property>
+		<many-to-one name="type" class="ActionType" column="ID_ACTION_TYPE" 
+					 lazy="false">
+		</many-to-one>
+		<subclass name="EmailAction" discriminator-value="E-MAIL">
+		</subclass>
+		<subclass name="RssAction" discriminator-value="RSS">
+		</subclass>
+	</class>
+</hibernate-mapping>

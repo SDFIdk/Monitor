@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	<bean id="action" class="org.easysdi.monitor.gui.webapp.views.json.ActionView" />
+	<bean id="actionsCollection" class="org.easysdi.monitor.gui.webapp.views.json.ActionsCollectionView" />
+	<bean id="aggregLogsCsv" class="org.easysdi.monitor.gui.webapp.views.csv.AggregLogView" />
+	<bean id="aggregLogsJson" class="org.easysdi.monitor.gui.webapp.views.json.AggregLogView" />
+	<bean id="alertsCollectionJson" class="org.easysdi.monitor.gui.webapp.views.json.AlertsCollectionView" />
+	<bean id="alertsCollectionRss" class="org.easysdi.monitor.gui.webapp.views.rss.AlertsCollectionView" />
+	<bean id="error" class="org.easysdi.monitor.gui.webapp.views.json.ErrorView" />
+	<bean id="job" class="org.easysdi.monitor.gui.webapp.views.json.JobView" />
+	<bean id="jobDefaultsCollection" class="org.easysdi.monitor.gui.webapp.views.json.JobDefaultsView" />
+	<bean id="jobResult" class="org.easysdi.monitor.gui.webapp.views.json.JobResultView" />
+	<bean id="jobsCollection" class="org.easysdi.monitor.gui.webapp.views.json.JobsCollectionView" />
+	<bean id="message" class="org.easysdi.monitor.gui.webapp.views.json.MessageView" />
+	<bean id="queriesCollection" class="org.easysdi.monitor.gui.webapp.views.json.QueryCollectionView" />
+	<bean id="query" class="org.easysdi.monitor.gui.webapp.views.json.QueryView" />
+	<bean id="queryParams" class="org.easysdi.monitor.gui.webapp.views.json.QueryParamsView" />
+	<bean id="rawLogsCsv" class="org.easysdi.monitor.gui.webapp.views.csv.RawLogView" />
+	<bean id="rawLogsJson" class="org.easysdi.monitor.gui.webapp.views.json.RawLogView" />
+	<bean id="respTimeCsv" class="org.easysdi.monitor.gui.webapp.views.csv.ResponseTimeView" />
+	<bean id="respTimeJson" class="org.easysdi.monitor.gui.webapp.views.json.ResponseTimeView" />
+	<bean id="overview" class="org.easysdi.monitor.gui.webapp.views.json.OverviewView" />
+	<bean id="overviewsCollection" class="org.easysdi.monitor.gui.webapp.views.json.OverviewsCollectionView" />
+	<bean id="overviewQueryView" class="org.easysdi.monitor.gui.webapp.views.json.OverviewQueryViewView" />
+	<bean id="overviewQueryCollection" class="org.easysdi.monitor.gui.webapp.views.json.OverviewQueryViewCollectionView" />
+	<bean id="queryValidationSettings" class="org.easysdi.monitor.gui.webapp.views.json.QueryValidationSettingsView" />
+	<bean id="queryValidationResult" class="org.easysdi.monitor.gui.webapp.views.json.QueryValidationResultView" />
+	<bean id="sla" class="org.easysdi.monitor.gui.webapp.views.json.SlaView" />
+	<bean id="slaCollection" class="org.easysdi.monitor.gui.webapp.views.json.SlaCollectionView" />
+	<bean id="holiday" class="org.easysdi.monitor.gui.webapp.views.json.HolidayView" />
+	<bean id="holidayCollection" class="org.easysdi.monitor.gui.webapp.views.json.HolidayCollectionView" />
+	<bean id="period" class="org.easysdi.monitor.gui.webapp.views.json.PeriodView" />
+	<bean id="periodCollection" class="org.easysdi.monitor.gui.webapp.views.json.PeriodCollectionView" />
+	<bean id="aggregHourLogsCsv" class="org.easysdi.monitor.gui.webapp.views.csv.AggregHourLogView" />
+	<bean id="aggregHourLogsJson" class="org.easysdi.monitor.gui.webapp.views.json.AggregHourLogView" />
+	<bean id="queryTestResult" class="org.easysdi.monitor.gui.webapp.views.json.QueryTestResultView" />	
+</beans>

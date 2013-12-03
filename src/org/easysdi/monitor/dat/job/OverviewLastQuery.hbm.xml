@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.easysdi.monitor.biz.job">
+	<class name="OverviewLastQueryResult" table="last_query_results" lazy="false">
+		<id name="lastQueryResultID" column="ID_LAST_QUERY_RESULT" type="long">
+			<generator class="org.hibernate.id.enhanced.TableGenerator">
+				<param name="table_name">last_ids</param>
+				<param name="value_column_name">LAST_ID</param>
+				<param name="segment_column_name">TABLE_NAME</param>
+				<param name="segment_value">LAST_QUERY_RESULTS</param>
+				<param name="initial_value">1</param>
+				<param name="increment_size">1</param>
+			</generator>
+		</id>
+	<property name="data" type="binary" column="DATA" />
+	<property name="contentType" type="text" column="CONTENT_TYPE" />
+	<property name="pictureUrl" type="string" lazy="false" column="PICTURE_URL" />
+	<property name="xmlResult" type="string" lazy="false" column="XML_RESULT" />
+	<property name="textResult" type="string" lazy="false" column="TEXT_RESULT" />
+	<property name="queryid" type="long" lazy="false" column="ID_QUERY" />
+		
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.easysdi.monitor.biz.alert">
+	<class name="Alert" table="alerts">
+		<id name="alertId" type="long" column="ID_ALERT">
+			<generator class="org.hibernate.id.enhanced.TableGenerator">
+				<param name="table_name">last_ids</param>
+				<param name="value_column_name">LAST_ID</param>
+				<param name="segment_column_name">TABLE_NAME</param>
+				<param name="segment_value">ALERTS</param>
+				<param name="initial_value">1</param>
+				<param name="increment_size">1</param>
+			</generator>
+		</id>
+		<property name="cause" type="text" column="CAUSE"></property>
+		<property name="time" type="calendar" column="ALERT_DATE_TIME"></property>
+		<property name="exposedToRss" type="boolean" column="EXPOSE_RSS"></property>
+		<property name="responseDelay" type="float" column="RESPONSE_DELAY" />
+		<property name="httpCode" type="integer" column="HTTP_CODE" />
+		<property name="imageError" type="binary" column="IMAGE" />
+		<property name="contentType" type="text" column="CONTENT_TYPE" />
+		<many-to-one name="newStatus" class="org.easysdi.monitor.biz.job.Status"
+			column="ID_NEW_STATUS"></many-to-one>
+		<many-to-one name="oldStatus" class="org.easysdi.monitor.biz.job.Status"
+			column="ID_OLD_STATUS"></many-to-one>
+		<many-to-one name="parentJob" class="org.easysdi.monitor.biz.job.Job" column="ID_JOB"></many-to-one>
+		
+	</class>
+</hibernate-mapping>

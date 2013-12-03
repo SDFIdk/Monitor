@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.easysdi.monitor.biz.job">
+	<class name="Job" table="jobs" lazy="false">
+		<id name="jobId" column="ID_JOB" type="long">
+			<generator class="org.hibernate.id.enhanced.TableGenerator">
+				<param name="table_name">last_ids</param>
+				<param name="value_column_name">LAST_ID</param>
+				<param name="segment_column_name">TABLE_NAME</param>
+				<param name="segment_value">JOBS</param>
+				<param name="initial_value">1</param>
+				<param name="increment_size">1</param>
+			</generator>
+		</id>
+		<set name="actions" table="actions" inverse="true" lazy="false" cascade="all-delete-orphan">
+			<key column="ID_JOB" not-null="true"></key>
+			<one-to-many class="org.easysdi.monitor.biz.alert.AbstractAction" />
+		</set>
+		<map name="queries" table="queries" lazy="false" cascade="all-delete-orphan" inverse="true">
+			<key column="ID_JOB" not-null="true"></key>
+			<map-key type="long" column="ID_QUERY"></map-key>
+			<one-to-many class="Query" />
+		</map>
+		<many-to-one name="status" class="Status" column="ID_STATUS" lazy="false"
+			not-null="true">
+		</many-to-one>
+		<property name="statusUpdateTime" type="calendar" column="STATUS_UPDATE_TIME" />
+		<component name="config" class="JobConfiguration" lazy="false">
+			<parent name="job" />
+			<property name="alertsActivated" column="TRIGGERS_ALERTS" type="boolean" lazy="false">
+			</property>
+			<property name="automatic" column="IS_AUTOMATIC" type="boolean" lazy="false"></property>
+			<many-to-one name="httpMethod" class="HttpMethod" column="ID_HTTP_METHOD"
+				lazy="false"></many-to-one>
+			<property name="login" column="LOGIN" type="string" length="45" lazy="false"></property>
+			<property name="jobName" column="NAME" type="string" length="45" lazy="false"></property>
+			<property name="password" column="PASSWORD" type="string" length="45" lazy="false"></property>
+			<property name="published" column="IS_PUBLIC" type="boolean" lazy="false"></property>
+			<property name="realTimeAllowed" column="ALLOWS_REALTIME" type="boolean" lazy="false"></property>
+			<property name="bizErrorChecked" column="BUSINESS_ERRORS" type="boolean" lazy="false"></property>
+			<property name="httpErrorChecked" column="HTTP_ERRORS" type="boolean" lazy="false"></property>
+			<property name="serviceTypeId" type="long" column="ID_SERVICE_TYPE" lazy="false"></property>
+			<property name="slaEndTime" column="SLA_END_TIME" type="calendar" lazy="false"></property>
+			<property name="slaStartTime" column="SLA_START_TIME" type="calendar" lazy="false"></property>
+			<property name="testInterval" column="TEST_INTERVAL" type="integer" lazy="false"></property>
+			<property name="timeout" column="TIMEOUT" type="integer" lazy="false"></property>
+			<property name="url" column="SERVICE_URL" type="string" length="255" lazy="false"></property>
+			<property name="saveResponse" column="SAVE_RESPONSE" type="boolean" lazy="false"></property>
+			<property name="runSimultaneous" column="RUN_SIMULTANEOUS" type="boolean" lazy="false"></property>
+			
+		</component>
+	</class>
+</hibernate-mapping>

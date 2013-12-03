@@ -1,0 +1,18 @@
+hibernate.c3p0.initialPoolSize=10 
+hibernate.c3p0.minPoolSize=1 
+hibernate.c3p0.maxPoolSize=25
+hibernate.c3p0.acquireRetryAttempts=10 
+hibernate.c3p0.acquireIncrement=5
+hibernate.c3p0.idleConnectionTestPeriod=3600 
+hibernate.c3p0.preferredTestQuery=SELECT 1; 
+hibernate.c3p0.testConnectionOnCheckin=false 
+hibernate.c3p0.maxConnectionAge=14400
+hibernate.c3p0.maxIdleTime=10800
+
+hibernate.defaultCatalog=monitor
+hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect
+
+jdbc.driver=com.mysql.jdbc.Driver
+jdbc.url=jdbc:mysql://monServeur/monitor
+jdbc.user=monUtilisateur
+jdbc.password=monMotDePasse

@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.easysdi.monitor.biz.job">
+	<class name="Period" table="periods" lazy="false">
+		<id name="periodId" column="ID_PERIODS" type="long">
+			<generator class="org.hibernate.id.enhanced.TableGenerator">
+				<param name="table_name">last_ids</param>
+				<param name="value_column_name">LAST_ID</param>
+				<param name="segment_column_name">TABLE_NAME</param>
+				<param name="segment_value">PERIODS</param>
+				<param name="initial_value">1</param>
+				<param name="increment_size">1</param>
+			</generator>
+		</id>
+	<many-to-one name="parentSla" class="Sla" column="ID_SLA"
+		lazy="false" insert="false" update="false"></many-to-one>
+	
+	<property name="slaId" type="long" column="ID_SLA" />
+	<property name="name" type="string" length="45" column="NAME" />
+	<property name="monday" type="boolean" column="MONDAY" />
+	<property name="tuesday" type="boolean" column="TUESDAY" />
+	<property name="wednesday" type="boolean" column="WEDNESDAY" />
+	<property name="thursday" type="boolean" column="THURSDAY" />
+	<property name="friday" type="boolean" column="FRIDAY" />
+	<property name="saturday" type="boolean" column="SATURDAY" />
+	<property name="sunday" type="boolean" column="SUNDAY" />
+	<property name="holidays" type="boolean" column="HOLIDAYS" />
+	<property name="slaStartTime" type="calendar" column="SLA_START_TIME" />
+	<property name="slaEndTime" type="calendar" column="SLA_END_TIME" />
+	<property name="include" type="boolean" column="INCLUDE" />
+	<property name="date" type="calendar" column="DATE" />
+	
+	</class>
+</hibernate-mapping>
