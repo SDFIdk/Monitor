@@ -64,22 +64,13 @@ public class CustomFtpInvoker extends ServiceInvoker{
 		    String server = this.getServiceConfig().getOnlineResource();
 		    
 	        FTPClient ftp = new FTPClient();
-	       /* if (printHash) {
-	            ftp.setCopyStreamListener(createListener());
-	        }
-	        if (keepAliveTimeout >= 0) {
-	            ftp.setControlKeepAliveTimeout(keepAliveTimeout);
-	        }
-	        if (controlKeepAliveReplyTimeout >= 0) {
-	            ftp.setControlKeepAliveReplyTimeout(controlKeepAliveReplyTimeout);
-	        }*/
+	
 	        ftp.setListHiddenFiles(hidden);
 	        long startTime = -1;
 	        long size = 0;
 	        Status status;
 	        try
 	        {
-	
 	        	startTime = new Long (System.currentTimeMillis ());
 	            int reply;
 	            
@@ -94,11 +85,15 @@ public class CustomFtpInvoker extends ServiceInvoker{
 
 	            if (!FTPReply.isPositiveCompletion(reply))
 	            {
-	                ftp.disconnect();
-	                status = Status.RESULT_STATE_SERVICE_UNAVAILABLE;
+	            	if (ftp.isConnected())
+	            	{
+	            		ftp.disconnect();
+	            	}
+	                status = Status.RESULT_STATE_SERVICE_UNAVAILABLE; 
 	                String lastMessage = "FTP server refused connection";
 	                ValidatorResponse errorResponse = new ValidatorResponse( lastMessage, status);
 	                errorResponse.setLastLapse(-1);
+	                errorResponse.setHttpStatusCode(500);
 	                errorResponse.setLastTest(Calendar.getInstance().getTime());
 	                return errorResponse; 
 	            }
@@ -108,8 +103,10 @@ public class CustomFtpInvoker extends ServiceInvoker{
 	                ftp.logout();
 	                status = Status.RESULT_STATE_SERVICE_UNAVAILABLE;
 	                String lastMessage = "Login not valid";
+	                
 	                ValidatorResponse errorResponse = new ValidatorResponse(lastMessage, status);
 	                errorResponse.setLastLapse(-1);
+	                errorResponse.setHttpStatusCode(500);
 	                errorResponse.setLastTest(Calendar.getInstance().getTime());
 	                return errorResponse; 
 	            }
@@ -121,11 +118,15 @@ public class CustomFtpInvoker extends ServiceInvoker{
 	            	response = new ValidatorResponse("",Status.RESULT_STATE_AVAILABLE);
 	            	response.setLastLapse(lapse);
 	            	response.setResponseLength(0);
-	            
+	            	response.setHttpStatusCode(200);
 	            	Calendar date = Calendar.getInstance();
 	            	date.setTimeInMillis(startTime);
 	            	response.setLastTest(date.getTime());
-	            	ftp.disconnect();
+	            	if (ftp.isConnected())
+	            	{
+	            		ftp.disconnect();
+	            	}
+	            	
 	            	return response;
 	            }
 	            
@@ -158,12 +159,16 @@ public class CustomFtpInvoker extends ServiceInvoker{
 	            {
 	            	long lapse = (System.currentTimeMillis() - startTime);
 	            	response = new ValidatorResponse("",Status.RESULT_STATE_AVAILABLE);
+	            	response.setHttpStatusCode(200);
 	            	response.setLastLapse(lapse);
 	            	response.setResponseLength(size);
 	            	Calendar date = Calendar.getInstance();
 	            	date.setTimeInMillis(startTime);
 	            	response.setLastTest(date.getTime());
-	            	ftp.disconnect();
+	             	if (ftp.isConnected())
+	            	{
+	             		ftp.disconnect();
+	            	}
 	            	return response;
 	            }else
 	            {
@@ -171,6 +176,7 @@ public class CustomFtpInvoker extends ServiceInvoker{
 	                String lastMessage = "File not found";
 	                ValidatorResponse errorResponse = new ValidatorResponse( lastMessage, status);
 	                errorResponse.setLastLapse( -1 );
+	                errorResponse.setHttpStatusCode(404);
 	                errorResponse.setLastTest( Calendar.getInstance().getTime());
 	                return errorResponse; 
 	            }
