@@ -1,0 +1,147 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+ <head>
+    <meta http-equiv="Cache-Control" content="no-store" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>AggLog</title>
+    
+    <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="excanvas.min.js"></script><![endif]-->
+    <!--<script language="javascript" type="text/javascript" src="FlotPOC/jquery.js"></script>-->
+    
+ <script type="text/javascript">
+$(function () {
+    var sin = [], cos = [];
+    for (var i = 0; i < 140; i += 0.5) {
+        sin.push([i, Math.sin(i)]);
+        cos.push([i, Math.cos(i)]);
+    }
+	
+	var datasets = {
+			"sin": {
+				label: "sin",
+				data: sin
+			},        
+			"cos": {
+				label: "cod",
+				data: cos 
+			}};
+/*
+    var plot = $.plot($("#placeholder"),
+           [ { data: sin, label: "Graf_1"}, { data: cos, label: "Graf_2" } ], {
+               series: {
+                   lines: { show: true },
+                   points: { show: true }
+               },
+               grid: { hoverable: true, clickable: true },
+               yaxis: { min: -1.2, max: 1.2 },
+			   zoom: {
+				 interactive: true
+				},
+				pan: {
+					interactive: true
+				}
+             });
+*/
+ 
+	
+		// insert checkboxes 
+		var choiceContainer = $("#choices");
+		$.each(datasets, function(key, val) {
+			choiceContainer.append("<br/><input type='checkbox' name='" + key +
+				"' checked='checked' id='id" + key + "'></input>" +
+				"<label for='id" + key + "'>"
+				+ val.label + "</label>");
+		});
+
+		choiceContainer.find("input").click(plotAccordingToChoices);
+
+		function plotAccordingToChoices() {
+
+			var data = [];
+			choiceContainer.find("input:checked").each(function () {
+				var key = $(this).attr("name");
+				if (key && datasets[key]) {
+					data.push(datasets[key]);
+				}
+			});
+
+			if (data.length > 0) {
+				$.plot("#placeholder", data, {
+					 yaxis: { min: -1.2, max: 1.2 },
+					  grid: { hoverable: true, clickable: true },
+			   zoom: {
+				 interactive: true
+				},
+				pan: {
+					interactive: true
+				},  series: {
+                   lines: { show: true },
+                   points: { show: true }
+               },
+					
+				});
+			}
+		}
+
+		plotAccordingToChoices();
+	
+	   function showTooltip(x, y, contents) {
+        $('<div id="tooltip">' + contents + '</div>').css( {
+            position: 'absolute',
+            display: 'none',
+            top: y + 5,
+            left: x + 5,
+            border: '1px solid #fdd',
+            padding: '2px',
+            'background-color': '#fee',
+            opacity: 0.80
+        }).appendTo("body").fadeIn(200);
+    }
+
+    var previousPoint = null;
+    $("#placeholder").bind("plothover", function (event, pos, item) {
+
+		if (item) {
+			if (previousPoint != item.dataIndex) {
+				previousPoint = item.dataIndex;
+				
+				$("#tooltip").remove();
+				var x = item.datapoint[0].toFixed(2),
+					y = item.datapoint[1].toFixed(2);
+				
+				showTooltip(item.pageX, item.pageY,
+							item.series.label + " of " + x + " = " + y);
+			}
+		}
+		else {
+			$("#tooltip").remove();
+			previousPoint = null;            
+		}
+        
+    });
+    $("#placeholder").bind("plotclick", function (event, pos, item) {
+        if (item) {
+            $("#clickdata").text("You clicked point " + item.dataIndex + " in " + item.series.label + ".");
+            plot.highlight(item.series, item.datapoint);
+        }
+    });
+});
+</script>
+ 
+ </head>
+    <body>
+    <h1>Agg log</h1>
+	<div style="width:1000px;height:400px;">
+    <div id="placeholder" style="float:left;width:800px;height:400px"></div>
+		<p id="choices" style="float:right; width:135px;"></p>
+	</div>
+ </body>
+</html>
+<!--
+Log
+http://54.246.100.46/joomla/index.php?option=com_easysdi_monitor&view=proxy&proxy_url=jobs/WFS/queries/URL_2/logs?minDate=2013-02-07&maxDate=2013-02-08&_dc=1360361728138
+aggLog
+http://54.246.100.46/joomla/index.php?option=com_easysdi_monitor&view=proxy&proxy_url=jobs/WFS/queries/URL_2/aggLogs?minDate=2013-02-01&maxDate=2013-02-08
+
+http://54.246.100.46/joomla/index.php?option=com_easysdi_monitor&view=proxy&proxy_url=jobs/WFS/queries/URL_2/logs?minDate=2013-02-08&maxDate=2013-02-08&_dc=1360361138803
+-->

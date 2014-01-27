@@ -1,0 +1,13 @@
+#divGroupsEdit {
+	border:solid thin #b7ddf2;
+	background:#ebf4fb;
+	padding: 5px;
+	width: 800px;
+}
+
+.groupEditlabel {
+    float: left;
+    width: 150px;
+    text-align:right;
+    margin-right: 10px;
+}

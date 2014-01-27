@@ -1,0 +1,19 @@
+.formDiv {
+    border: solid thin #b7ddf2;
+    background: #ebf4fb;
+    padding: 5px;
+    width: 800px;
+}
+
+.heading {
+	font-size: medium;
+	}
+
+#tbLoginName,
+#tbLoginPwd {
+    width: 200px;
+}
+
+body {
+	font-size: small;
+}

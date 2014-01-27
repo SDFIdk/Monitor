@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Cache-Control" content="no-store" />
+    <title></title>
+
+    <script type="text/javascript" src="Scripts/kms_monitor_holidays.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="CSS/holidays.css" />
+    <link type="text/css" rel="stylesheet" href="Content/themes/base/jquery-ui.css" />
+
+</head>
+<body>
+   
+   	<input type="hidden" id="hidHolidayUpdateMode" value="" />
+   
+    <div id="divHolidays">
+
+        <b class="heading">Holidays</b>
+        <span style="float: right">
+            <input type="button" id="bnAddHoliday" value="Add holiday" />
+            <input type="button" id="bnDeleteHoliday" value="Delete holiday" />
+        </span>
+        <hr />
+
+		<label class="holidaysEditlabel">Holidays</label>
+        <select id="sbHolidays" size="5" style="width: 250px"></select>
+			<br />
+
+        <div id="divHolidayEdit" style="display: none">
+                        
+            &nbsp;<br />
+            <b class="heading">Edit holiday</b>
+            <span style="float: right">
+                <input type="button" id="bnHolidaySave" value="Save" />
+                <input type="button" id="bnHolidayCancel" value="Cancel" />
+            </span>
+            <hr />
+
+            <label class="holidaysEditlabel">Holiday name</label>
+            <input type="text" id="tbHolidayName" style="width:250px" /><br />
+            
+            <label class="holidaysEditlabel">Specific date</label>          
+            <input type="text" id="tbHolidayDate" /><br />
+
+        </div>
+    </div>
+    <br />
+    <div id="divHolidays_LastAction" style="color: red"></div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            Holidays_Init();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Cache-Control" content="no-store" />
+    <title></title>
+
+    <script type="text/javascript" src="Scripts/kms_monitor_requests.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="CSS/requests.css" />
+</head>
+<body>
+    Group:
+    <select id="tbRequest_Group"></select>
+    <input type="button" id="bnRequestNew" value="Create new request" /><br />
+    &nbsp;<br />
+
+	<div id="divRequestQuickLinks"></div>
+
+    <div id="divRequestEditx">
+        <b class="heading">Edit request</b>
+        <span style="float: right">
+            <input type="button" id="bnRequestEdit_RunTest" value="Run test" />
+            <input type="button" id="bnRequestEditSaveOnly" value="Save" />
+            <input type="button" id="bnRequestEditSave" value="Save and close" />
+            <input type="button" id="bnRequestEditClose" value="Close" /></span>
+        <hr />
+        <div id="divRequestEditContainer"></div>
+    </div>
+
+    <div id="divRequestsGrid">
+    </div>
+    <br />
+    &nbsp;<br />
+
+    <div id="divRequest_LastAction" style="color: red"></div>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            Request_PopulateSelectBoxGroups($("#tbRequest_Group"));
+            InitializeDatagridRequests()
+
+            $("#divRequestEditx").hide();
+            $("#bnRequestEditSave").hide();
+            $("#bnRequestEditClose").hide();
+            $("#divRequestEditContainer").load("request_edit.html");
+
+            Request_AddEventHandlers();
+
+        });
+    </script>
+</body>
+</html>

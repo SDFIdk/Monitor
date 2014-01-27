@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Cache-Control" content="no-store" />
+
+    <script type="text/javascript" src="Scripts/kms_monitor_reports.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="Content/themes/base/jquery-ui.css" />
+
+    <title></title>
+
+</head>
+<body>
+
+    <div class="formDiv">
+        <b class="heading">Reports </b>
+        <span style="float: right;">
+            <input type="button" id="bnDisplayReport" value="Display report" />
+
+            <input type="button" id="bnExport" value="Export" />
+            <select id="sbExport"></select>
+        </span>
+        <hr />
+        Group:
+        <select id="sbReportGroup"></select>&nbsp;
+        Request:
+        <select id="sbReportRequest"></select>&nbsp;
+        SLA:
+        <select id="sbReportSLA"></select><br />
+        Period:
+        <select id="sbReportPeriod"></select>&nbsp;
+        Date interval:
+        <input type="text" id="tbPeriodFrom" />
+        -
+        <input type="text" id="tbPeriodTo" />&nbsp;
+        <input type="checkbox" id="cbUseAgg" />
+        Aggregated
+
+    </div>
+
+
+
+	<div class="content">
+		<span class="widget">
+			<div class="widget-header">Service Response Time<img id="service_response_time_status_img" src="img/loading_sml.gif" class="statusimg" style="display:none"/></div>
+			<div class="widget-content">
+				<div id="divGraphPlaceholder">
+					<div class="chart" id="divReportGraph"></div>
+					<div class="chart-legend" id="pGraphChoices"></div>
+				</div>
+			</div>
+		</span>
+		<span class="widget">
+			<div class="widget-header">Service Health<img id="service_response_health_status_img" src="img/loading_sml.gif" class="statusimg" style="display:none"/></div>
+			<div class="widget-content">
+				<div id="divGraphPlaceholder">
+					<div class="chart" id="divReportGraph2"></div>
+					<div class="chart-legend" id="pGraphChoices2"></div>
+				</div>
+			</div>
+		</span>
+	</div>
+
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            Report_Init();
+        });
+
+    </script>
+
+</body>
+</html>

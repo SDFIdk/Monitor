@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Cache-Control" content="no-store" />
+    <title></title>
+</head>
+<body>
+
+    <input id="hidRequestEdit_GroupId" type="hidden" />
+    <input id="hidRequestEdit_GroupHttpMethodId" type="hidden" />
+
+    <input id="hidRequestEdit_Mode" type="hidden" />
+
+    <input id="hidRequestEdit_RequestId" type="hidden" />
+    <input id="hidRequestEdit_RequestHttpMethodId" value="" type="hidden" />
+    <input id="hidRequestEdit_RequestServiceTypeId" value="" type="hidden" />
+    <input id="hidRequestEdit_RequestServiceMethodId" value="" type="hidden" />
+
+    <div id="divRequestEdit">
+
+        <label class="requestEditlabel">Group</label>
+        <input id="tbRequestEdit_Group" type="text" readonly="readonly" /><br />
+        <label class="requestEditlabel">Name</label>
+        <input id="tbRequestEdit_Name" type="text" /><br />
+        <label class="requestEditlabel">URL</label>
+        <input id="tbRequestEdit_Url" type="text" /><br />
+        <label class="requestEditlabel">Parameters</label>
+        <textarea id="tbRequestEdit_Parameters" rows="5" ></textarea><br />
+		
+        <span id="divRequestEdit_ServiceType">
+            <label class="requestEditlabel">Service type</label>
+            <select id="sbRequestEdit_ServiceType"></select><br />
+        </span>
+        <label class="requestEditlabel">Service method</label>
+        <select id="sbRequestEdit_ServiceMethod"></select><br />
+        <span id="divRequestEdit_HttpMethod">
+            <label id="sbRequestEditlabel" class="requestEditlabel">HTTP method</label>
+            <select id="sbRequestEdit_HttpMethod"></select><br />
+        </span>
+        <span id="divRequestEdit_Login">
+            <label id="sbRequestEditlabel" class="requestEditlabel">Username</label>
+             <input type="text" id="tbRequestEdit_login" />  <br />
+            <label id="sbRequestEditlabel" class="requestEditlabel">Password</label>
+             <input type="text" id="tbRequestEdit_password" />
+             <br />
+        </span>
+        <span id="divRequestEdit_SOAPActionUrl">
+            <label class="requestEditlabel">SOAP action URL</label>
+            <input type="text" id="tbRequestEdit_SOAPActionUrl" />
+        </span>
+        
+        <hr />
+        <label class="requestEditlabel">Size validation</label>
+        <input type="checkbox" id="cbRequestEdit_UseSizeValidation" /><br />
+        <label class="requestEditlabel">Norm size (bytes)</label>
+        <input type="text" id="tbRequestEdit_NormSize" />
+        <label>Result</label>
+        <input type="text" id="tbRequestEdit_normSize_Result" />
+        <label>Max size 4294967295</label>
+        <br />
+        <label class="requestEditlabel">Size tolerance [+/-]</label>
+        <select id="sbRequestEdit_NormSizeTolerance">
+            <option value="0">0%</option>
+            <option value="5">5%</option>
+            <option value="10">10%</option>
+            <option value="15">15%</option>
+            <option value="20">20%</option>
+            <option value="25">25%</option>
+            <option value="40">40%</option>
+            <option value="50">50%</option>
+            <option value="75">75%</option>
+            <option value="100">100%</option>
+        </select><br />
+        &nbsp;<br />
+        <label class="requestEditlabel">Time validation</label>
+        <input type="checkbox" id="cbRequestEdit_UseTimeValidation" /><br />
+        <label class="requestEditlabel">Norm time [ms]</label>
+        <input type="text" id="tbRequestEdit_normTime" />
+        <label>Result</label>
+        <input type="text" id="tbRequestEdit_normTime_Result" />
+        
+        <br />
+        &nbsp;<br />
+        
+        <label class="requestEditlabel">Response validation</label>
+		    <div id="divRequestEdit_ResponseVal">
+		    <input type="radio" name="rbRequestEdit_ResponseVal" value="_none" checked>None
+		    <input type="radio" name="rbRequestEdit_ResponseVal" value="_xpath">Xpath
+		    <input type="radio" name="rbRequestEdit_ResponseVal" value="_text">Text<br>
+	    </div>
+        
+        <label class="requestEditlabel">Expected result</label>
+        <textarea id="tbRequestEdit_ExpectedResult" rows="3"></textarea><br />
+        <label class="requestEditlabel">Xpath</label>
+        <textarea id="cbRequestEdit_xpathExpression" rows="3"></textarea>&nbsp;&nbsp;<a href="http://www.w3schools.com/xpath/xpath_syntax.asp" target="_blank">Help XPath syntax</a><br />
+        <label class="requestEditlabel">Result</label>
+        <input type="text" id="tbRequestEdit_xpathExpression_Result" />
+        <br />
+        <div id="divMap" style="display:none">
+            &nbsp;<br />
+            <label class="requestEditlabel">Map image</label>
+            <img id="imgRequestEdit_Result" src="" style="width: 300px;" /><br />
+        </div>
+        <div id="divResponse">
+            &nbsp;<br />
+            <label class="requestEditlabel">&nbsp;</label>
+            <a id="txtRequestEdit_ResultResponse" href="http://" target="_blank">See response</a><br />
+        </div>
+        <br />
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            RequestEdit_AddEventHandlers();
+        });
+    </script>
+
+</body>
+</html>

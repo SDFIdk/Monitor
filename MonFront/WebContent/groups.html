@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Cache-Control" content="no-store" />
+    <title></title>
+
+    <script type="text/javascript" src="Scripts/kms_monitor_groups.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="CSS/groups.css" />
+</head>
+<body>
+    Select group to edit: 
+    <select id="selGroups"></select>
+    <input type="button" id="bnDeleteGroup" value="Delete group" />
+    <br />&nbsp;<br />
+
+    <div id="divGroupsEdit">
+        <b class="heading">Edit group</b><span style="float:right"><input type="button" id="bnCommit" value="Save" /></span><br />
+        <hr />
+         <label class="groupEditlabel">Id</label>
+        <input id="groupId" type="text" readonly="readonly" /><br />
+        <label class="groupEditlabel">Name</label>
+        <input type="text" id="tbGroupsGroupName" /><br />
+        <label class="groupEditlabel">HTTP method</label>
+        <select id="selGroupsHttpMethod"></select><br />
+        <label class="groupEditlabel">Service type</label>
+        <b>WMS, WMTS, WFS, WCS, CSW, SOS, FTP</b><br />
+        <label class="groupEditlabel">Test interval</label>
+        <input type="text" id="bnGroupsTestInterval" /><br />
+        <label class="groupEditlabel">Timeout</label>
+        <input type="text" id="bnGroupsTimeout" /><br />&nbsp;<br />
+        <label class="groupEditlabel">Is automatic</label>
+        <input type="checkbox" id="cbGroupsIsAutomatic" /><br />
+       <!--  <label class="groupEditlabel">Realtime execution</label>
+        <input type="checkbox" id="cbGroupsAllowsRealTime" /><br />-->
+        <!--<label class="groupEditlabel">Triggers alert</label>
+        <input type="checkbox" id="cbGroupsTriggersAlerts" /><br />-->
+        <label class="groupEditlabel">HTTP errors</label>
+        <input type="checkbox" id="cbGroupsHttpErrors" /><br />
+        <!--<label class="groupEditlabel">OGC errors</label>
+        <input type="checkbox" id="cbGroupsBizErrors" /><br />-->
+        <label class="groupEditlabel">Save response</label>
+        <input type="checkbox" id="cbGroupsSaveResponse" /><br />
+        <label class="groupEditlabel">Run simultaneous</label>
+        <input type="checkbox" id="cbRunSimultaneous" /><br />
+
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            InitGroupForm();
+            AddGroupEventHandlers();
+        });
+
+    </script>
+
+</body>
+</html>

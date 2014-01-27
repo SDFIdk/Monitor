@@ -1,0 +1,40 @@
+﻿.requestEditlabel {
+    float: left;
+    width: 150px;
+    text-align:right;
+    margin-right: 10px;
+}
+
+
+
+/*#tbRequestEdit_Url {
+    width: 100%;
+}
+
+#tbRequestEdit_Parameters {
+       width: 100%;
+}*/
+
+#divRequestEditx {
+border:solid thin #b7ddf2;
+background:#ebf4fb;
+padding: 5px;
+
+}
+
+
+
+#tbRequestEdit_Parameters,
+#tbRequestEdit_Url {
+    width: 550px;
+}
+
+#tbRequestEdit_Group,
+tbRequestEdit_Name {
+    width: 300px
+}
+
+#cbRequestEdit_expectedXpathOutput,
+#cbRequestEdit_xpathExpression {
+    width: 400px;
+}

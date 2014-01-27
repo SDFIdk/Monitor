@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Cache-Control" content="no-store" />
+    <title></title>
+
+    <script type="text/javascript" src="Scripts/kms_monitor_sla.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="CSS/sla.css" />
+    <link type="text/css" rel="stylesheet" href="Content/themes/base/jquery-ui.css" />
+
+</head>
+<body>
+    <input type="hidden" id="hidSlaPeriodUpdateMode" value="" />
+    
+    Select SLA to edit: 
+    <select  id="sbSla"></select>
+
+    <br />
+    &nbsp;<br />
+
+    <div id="divSlaEdit">
+
+        <b class="heading">Edit SLA</b>
+        <span style="float: right">
+            <input type="button" id="bnSlaAddPeriod" value="Add period" />
+            <input type="button" id="bnDeleteSla" value="Delete SLA" />
+            <input type="button" id="bnSlaSave" value="Save" />
+            <input type="button" id="bnSlaCancel" value="Cancel" />
+        </span>
+        <hr />
+
+        <label class="slaEditlabel">SLA name</label>
+        <input type="text" id="tbSlaName" style="width:250px" /><br />
+        &nbsp;<br />
+
+        <label class="slaEditlabel">Exclude 10% worst</label>
+        <input type="checkbox" id="cbSlaInspire" /><br />
+
+        <label class="slaEditlabel">Mesaure to first byte</label>
+        <input type="checkbox" id="cbSlaMeasureFirstByte" /><br />
+        &nbsp;<br />
+
+        <label class="slaEditlabel">Periods</label>
+        <select id="sbSlaPeriods" size="5" style="width: 250px"></select>
+
+
+        <div id="divSlaPeriodEdit" style="display: none">
+            
+            
+                        
+            &nbsp;<br />
+            <b class="heading">Edit period</b>
+            <span style="float: right">
+                <input type="button" id="bnSlaDeletePeriod" value="Delete period" />
+                <input type="button" id="bnSlaSavePeriod" value="Save" />
+                <input type="button" id="bnSlaPeriodCancel" value="Cancel" />
+            </span>
+            <hr />
+
+            <label class="slaEditlabel">Period name</label>
+            <input type="text" id="tbSlaPeriodName" style="width:250px" /><br />
+            &nbsp;<br />
+
+            <label class="slaEditlabel">Period</label>
+            <input type="radio" name="rbSlaPeriodInclExcl" value="_include" checked="checked" />Include<br />
+            <label class="slaEditlabel">&nbsp;</label>
+            <input type="radio" name="rbSlaPeriodInclExcl" value="_exclude" />Exclude<br />
+            &nbsp;<br />
+
+            <label class="slaEditlabel">Date</label>
+            <input type="radio" name="rbSlaPeriodDate" value="_specific" checked="checked" />Specific date
+            &nbsp;&nbsp;          
+            <input type="text" id="tbSlaPeriodSpecificDate" /><br />
+
+            <label class="slaEditlabel">&nbsp;</label>
+            <input type="radio" name="rbSlaPeriodDate" value="_general" checked="checked" />General rule (every week)<br />
+
+            <label class="slaEditlabel">&nbsp;</label>
+            <input type="checkbox" id="cbSlaPeriodMon" />Mon
+            <input type="checkbox" id="cbSlaPeriodTue" />Tue
+            <input type="checkbox" id="cbSlaPeriodWed" />Wed
+            <input type="checkbox" id="cbSlaPeriodThu" />Thu
+            <input type="checkbox" id="cbSlaPeriodFri" />Fri
+            <input type="checkbox" id="cbSlaPeriodSat" />Sat
+            <input type="checkbox" id="cbSlaPeriodSun" />Sun
+            <input type="checkbox" id="cbSlaPeriodHolidays" />Holidays
+            <br />
+            &nbsp;<br />
+
+            <label class="slaEditlabel">Time interval</label>
+            from:
+            <select id="sbTimeIntFrom"></select>
+            to:
+            <select id="sbTimeIntTo"></select>
+
+        </div>
+    </div>
+    <br />
+    <div id="divSla_LastAction" style="color: red"></div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            Sla_Init();
+        });
+
+    </script>
+</body>
+</html>

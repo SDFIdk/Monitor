@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Cache-Control" content="no-store" />
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <title></title>
+
+	<script language="javascript" type="text/javascript" src="js/jquery.js"></script>
+
+	<script src="DataTables/js/jquery.dataTables.js" type="text/javascript"></script>
+	<script type="text/javascript" src="Scripts/kms_monitor_values.js"></script>
+	<script type="text/javascript" src="Scripts/kms_monitor_common.js"></script>
+
+	<script type="text/javascript" src="Scripts/jquery-ui-1.10.2.js"></script>
+	<script type="text/javascript" src="Scripts/jquery.cookie.js"></script>
+
+
+
+
+	<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.js"></script>
+	<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.time.js"></script>
+	<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.navigate.js"></script>
+	<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.stack.js"></script>
+	<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.tooltip.js"></script>
+
+	<link type="text/css" rel="stylesheet" href="DataTables/css/jquery.dataTables.css" />
+	<link href="FlotPOC/layout.css" rel="stylesheet" type="text/css" />
+	<link href="CSS/common.css" rel="stylesheet" type="text/css" />
+	<link href="CSS/chart.css" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+    <div id="divMainMenu">
+
+        <input id="bnMainGroups" type="button" value="Groups" />
+        <input id="bnMainRequests" type="button" value="Requests" />
+        <input id="bnMainReports" type="button" value="Reports" />
+        <input id="bnMainSLA" type="button" value="SLA" />
+        <input id="bnMainHolidays" type="button" value="Holidays" />
+        <span style="float:right">29.08.2013</span>
+    </div>
+    <hr />
+    <div id="divMainContent">
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $.ajaxSetup({ cache: false });
+
+            if (CheckAut()) {
+
+                $("#divMainContent").load("requests.html");
+
+                $("#bnMainOverview").click(function () {
+                    $("#divMainContent").load("overview.html");
+                });
+
+                $("#bnMainGroups").click(function () {
+                    $("#divMainContent").load("groups.html");
+                });
+
+                $("#bnMainRequests").click(function () {
+                    $("#divMainContent").load("requests.html");
+                });
+
+                $("#bnMainReports").click(function () {
+                    $("#divMainContent").load("reports.html");
+                });
+
+                $("#bnMainSLA").click(function () {
+                    $("#divMainContent").load("sla.html");
+                });
+
+                $("#bnMainHolidays").click(function () {
+                    $("#divMainContent").load("holidays.html");
+                });
+
+            } else {
+                $("#divMainContent").load("login.html");
+            }
+
+            });
+
+    </script>
+
+</body>
+</html>

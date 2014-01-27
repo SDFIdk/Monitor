@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Cache-Control" content="no-store" />
+    <title></title>
+    <link type="text/css" rel="stylesheet" href="CSS/login.css" />
+</head>
+<body>
+    <div id="divLogin" class="formDiv">
+        <label class="loginLabel">Login name</label>
+    <input id="tbLoginName" type="text" /><br />
+        <label class="loginLabel">Password</label>
+    <input id="tbLoginPwd" type="password" />
+        <input type="button" id="bnLoginSubmit" value="Login" />
+    </div>
+    <br />
+    <div id="divLogin_LastAction" style="color: red"></div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#bnLoginSubmit").click(function () {
+                var authSuccess = DoAuth($("#tbLoginName").val(), $("#tbLoginPwd").val());
+                if (authSuccess == true) {
+                    location.reload();
+                } else {
+                    $("#divLogin_LastAction").text("Wrong username or password.");
+                    $("#tbLoginName").focus();
+                }
+            });
+
+            $("#divLogin").keyup(function (event) {
+                if (event.keyCode == 13) {
+                    $("#bnLoginSubmit").click();
+                }
+            });
+
+        });
+        
+    </script>
+
+</body>
+</html>
