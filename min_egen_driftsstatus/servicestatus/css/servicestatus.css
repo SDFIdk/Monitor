@@ -1,0 +1,64 @@
+/* General styling */
+* {
+    font-family: Verdana, Geneva, sans-serif;
+    font-size: 14px;
+    color: #333333;
+}
+
+a {
+	cursor: pointer;
+}
+
+/*
+The div containing all the service status content
+Useful for setting the width
+*/
+.container {
+   width: 200px;
+   padding: 5px;
+}
+
+/* The css for the list (ul) */
+.status {
+    padding: 0;
+    margin: 0;
+}
+
+/* The css for every service status (li) */
+.status li {
+    list-style-type: none;
+    padding: 5px;
+    border-radius: 3px;
+}
+
+.status li:hover {
+    background: #f5f5f5;
+}
+
+/* the icon class */
+.status li i {
+    margin-top: 2px;
+}
+
+/* the link css */
+a {
+  color: #428bca;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+
+/* use these classes when smaller font-sizes are appropriate */
+.text-small {
+    font-size: 12px;
+}
+
+.text-xsmall {
+    font-size: 10px;
+}
+.text-dimmed {
+    color: #999999;
+}

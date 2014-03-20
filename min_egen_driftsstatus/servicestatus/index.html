@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="refresh" content="60" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<meta name="description" content="Kortforsyningen Service Status">
+	<meta name="author" content="Nikolaj Kamstrup">
+	<title>Kortforsyningen Service Status</title>
+	
+	<link href="css/font-awesome.css" rel="stylesheet">
+	<!--[if IE 7]><link rel="stylesheet" href="css/font-awesome-ie7.min.css"><![endif]-->
+	<link href="css/servicestatus.css" rel="stylesheet">
+	
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	
+	<script type="text/javascript">
+
+            /* ---------------------------------------------------------------------------
+                    Configuration - start
+            --------------------------------------------------------------------------- */
+            
+            // Global interval for checking update responses
+            var updateInterval = null;
+            
+            // The host of the service status API. Do not change unless told to do so!
+            var SERVICE_STATUS_API_HOST = "http://monitor.kortforsyningen.dk/Monitor/serviceapi";
+            
+            // Define status. Do not change the id (Icons: http://fortawesome.github.io/Font-Awesome/icons/)
+            var STATUS_UNKNOWN = 'OUT_OF_ORDER';
+            var STATUS = {
+                'AVAILABLE': {
+                        'id':	    1,
+                        'text': 	'Tilgængelig',
+                        'icon':	        'icon-smile',
+                        'color': 	'#31B404'
+                },
+                'UNAVAILABLE': {
+                        'id':	    2,
+                        'text':     'Ikke tilgængelig',
+                        'icon':     'icon-meh',
+                        'color':    '#FFBF00'
+                },
+                'OUT_OF_ORDER': {
+                        'id':	    3,
+                        'text':     'Virker ikke',
+                        'icon':     'icon-frown',
+                        'color':    '#B40404'
+                }
+            };
+            
+            /*
+                    Configuration of what we want to test
+                    Start by creating a group with a name chosen by you and add one or more services to it.
+                    The status for every service will be requested and the aggregated result of all services in a group
+                    will be displayed in the HTML. The poorest status of all services in a group wins! Meaning
+                    that if 3 services are AVAILABLE and one is OUT OF ORDER, the aggregated result is OUT OF ORDER.
+                    Notice, that a service contains a groupId and serviceId.
+            */
+            var SERVICES_TO_TEST = [
+                    {
+                            "group": "WMS",
+                            "services": [
+                                    {"serviceGroupId": 53, "serviceId": 110, "working": 0},	// Topo25
+                                    {"serviceGroupId": 53, "serviceId": 111, "working": 0},	// Skaermkort
+                                    {"serviceGroupId": 53, "serviceId": 112, "working": 0},	// Topogeo3p
+                                    {"serviceGroupId": 53, "serviceId": 113, "working": 0}	// Ortoforaar
+                            ]
+                    },
+                    {
+                            "group": "Geonøgler",
+                            "services": [
+                                    {"serviceGroupId": 53, "serviceId": 120, "working": 0},	// GeoA (classic)
+                                    {"serviceGroupId": 53, "serviceId": 121, "working": 0}	// Geokey_v4
+                            ]
+                    },
+                    {
+                            "group": "WMTS",
+                            "services": [
+                                    {"serviceGroupId": 53, "serviceId": 116, "working": 0},	// Ortoforaar
+                                    {"serviceGroupId": 53, "serviceId": 117, "working": 0}	// Skaermkort
+                            ]
+                    },
+                    {
+                            "group": "WFS",
+                            "services": [
+                                    {"serviceGroupId": 53, "serviceId": 118, "working": 0},	// mat_gmlsfp
+                                    {"serviceGroupId": 53, "serviceId": 119, "working": 0}	// mat_gml2
+                            ]
+                    }
+            ];
+            
+            
+            var SERVICES_TO_TEST = [
+                    {
+                            "group": "Dem alle sammen",
+                            "services": [
+                                    {"serviceGroupId": 55, "serviceId": 129, "working": 0},	// expected unavailable
+                                    {"serviceGroupId": 55, "serviceId": 130, "working": 0},	// expected out of order
+                                    {"serviceGroupId": 55, "serviceId": 131, "working": 0},	// expected unavailable
+                                    {"serviceGroupId": 55, "serviceId": 132, "working": 0}	// expected available
+                            ]
+                    },
+                    {
+                            "group": "Exp_unavailable",
+                            "services": [
+                                    {"serviceGroupId": 55, "serviceId": 129, "working": 0}
+                            ]
+                    },
+                    {
+                            "group": "Exp_outoforder",
+                            "services": [
+                                    {"serviceGroupId": 55, "serviceId": 130, "working": 0} 
+                            ]
+                    },
+                    {
+                            "group": "Exp_available",
+                            "services": [
+                                    {"serviceGroupId": 55, "serviceId": 132, "working": 0}
+                            ]
+                    }
+            ];
+            
+            /* ---------------------------------------------------------------------------
+            Configuration - end
+            --------------------------------------------------------------------------- */
+            
+            /*
+             *	Trigger a new update
+             */
+            function triggerUpdate() {
+                    fetchStatus(SERVICES_TO_TEST);
+                    updateInterval = setInterval('updateStatus(SERVICES_TO_TEST)', 100);
+            }
+            
+            
+            /*
+             *	Function that requests new status from the API
+             */
+            function fetchStatus(groups) {
+                    $.each(groups, function(i, service){			// Loop through every group and initiate calls
+                            $.each(service.services, function(j, data) {	// Loop through all services in group and get status
+                                    var url = getServiceUrl(data);		// get URL to service status api
+                                    data.working = 1;
+                                    
+                                    $.getJSON(url, function(result) {		// Request the URL to get a status in JSONP
+                                            data.lastResponse = result.data.Status;
+                                            data.working = 0;
+                                    });
+                            });
+                    });
+            }
+            
+            
+            /*
+             *	Update html status based on last response
+             */
+            function updateStatus(groups) {
+                    $("#status").empty();
+                    $("#lastupdate").empty();
+                    
+                    var currentTime = new Date();
+                    var hours = currentTime.getHours();
+                    var minutes = currentTime.getMinutes();
+                    var updateNote = "Opdateret " + hours + ":" + (minutes < 10 ? '0' : '') + minutes;
+                    
+                    var groupWork = 0;
+                    
+                    $.each(groups, function(i, service) {
+                            var working	= 0;
+                            
+                            $.each(service.services, function(j, data) {
+                                    working = data.working;
+                            });
+                            
+                            if (!working) {
+                                    var aggregatedStatus = getStatus('AVAILABLE');
+                                    var output = '';
+                                    
+                                    $.each(service.services, function(j, data) {
+                                            var status = getStatus(data.lastResponse);
+                                            
+                                            // Highest priority within the group wins!
+                                            // So if 3 services return AVAILABLE and 1 returns OUT OF ORDER, the group status becomes OUT OF ORDER.
+                                            if (status.id > aggregatedStatus.id) {
+                                                    aggregatedStatus = status;
+                                            }
+                                    });
+                                    
+                                    // make HTML with status of group status
+                                    output += "<li>" + service.group +
+                                                            "<i title='" + aggregatedStatus.text + "' " + 
+                                                            "class='" + aggregatedStatus.icon + " pull-right' " +
+                                                            "style='color:" + aggregatedStatus.color + "'></i> " +
+                                                            "</li>";
+                                                                    
+                                    $("#status").append(output);
+                            }
+                            
+                            groupWork = working;
+                    });
+                    
+                    // Keep interval running till groupWork is over
+                    if (!groupWork) {
+                            $("#lastupdate").html(updateNote);
+                            updateInterval = null;
+                    }
+            }
+            
+            
+            /*
+             *	Function to create a URL to the service status api.
+             *
+             *	@param		mixed		A single serviceid OR array of ID's for a group of services OR null (?)
+             *	@return		string		Url to service
+             */
+            function getServiceUrl(data) {
+                    var url = SERVICE_STATUS_API_HOST;
+                    var serviceId = data.serviceId;
+                    var serviceGroupId = data.serviceGroupId;
+                    
+                    // Status for a specific service e.g. Skærmkort
+                    if (serviceId != null) {
+                            url += "/groups/" + serviceGroupId + "/requests/" + serviceId + "/status";
+                    }
+                    // Status for a group of services e.g. WMS
+                    else {
+                            url += "/groups/" + serviceGroupId + "/status";
+                    }
+                    
+                    // add JSONP callback
+                    url += "?jsonpCallback=?";
+                    
+                    // add timestamp to invalidate cache
+                    var date = new Date();
+                    var timestamp = date.getTime();
+                    url += "&ts=" + timestamp;
+
+                    return url;
+            }
+            
+            /*
+             *	Function to get status details by status text
+             *
+             *	@param		string		Status text
+             *	@return		array		Array with status details [id, text, icon, color]
+             */
+            function getStatus(statusText) {
+                    if (typeof(STATUS[ statusText ]) == 'undefined') {
+                            statusText = STATUS_UNKNOWN;
+                    }
+                    
+                    return STATUS[statusText];
+            }
+            
+            
+            $(document).ready(function() {
+                    triggerUpdate();
+            });
+	</script>
+
+</head>
+<body>
+
+	<div class="container">
+		<ul class="status" id="status">
+		</ul>
+		<a onclick="javascript:triggerUpdate();" class="text-small pull-left">&raquo; Opdatér</a>
+		<span class="text-small text-dimmed pull-right" id="lastupdate"></span>
+	</div>
+
+</body>
+</html>
