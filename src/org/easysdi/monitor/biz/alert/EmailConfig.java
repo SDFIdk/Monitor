@@ -21,6 +21,9 @@ public class EmailConfig {
     private String smtpPassword;
     private String smtpUserName;
     private String language;
+    private String recivers;
+    private String initmail;
+    private String querymail;
 
 	/**
      * Instantiates the configuration.
@@ -45,9 +48,7 @@ public class EmailConfig {
      * @throws  IOException the properties file couldn't be read
      */
     private void loadConfig() throws IOException {
-        final InputStream propStream 
-            = this.getClass().getClassLoader().getResourceAsStream(
-                                                       "Email.properties");
+        final InputStream propStream = this.getClass().getClassLoader().getResourceAsStream("Email.properties");
 
         final Properties emailProps = new Properties();
         emailProps.load(propStream);
@@ -66,7 +67,11 @@ public class EmailConfig {
         this.setSenderAddress(emailProps.getProperty("sender"));
         this.setSmtpHost(emailProps.getProperty("smtp.host"));
         this.setSmtpPassword(emailProps.getProperty("smtp.password"));
+        this.setSmtpUserName(emailProps.getProperty("smtp.user"));
         this.setLanguage(emailProps.getProperty("language"));
+        this.setReciver(emailProps.getProperty("recivers"));
+        this.setInitmail(emailProps.getProperty("initmail"));
+        this.setQuerymail(emailProps.getProperty("querymail"));
     }
 
 
@@ -80,8 +85,6 @@ public class EmailConfig {
         this.senderAddress = newSenderAddress;
     }
 
-
-
     /**
      * Gets the address to use as the sender.
      * 
@@ -90,7 +93,16 @@ public class EmailConfig {
     public String getSenderAddress() {
         return this.senderAddress;
     }
-
+    
+    public void setReciver(String recivers)
+    {
+    	this.recivers = recivers;
+    }
+    
+    public String getReciver()
+    {
+    	return this.recivers;
+    }
 
 
     /**
@@ -167,5 +179,24 @@ public class EmailConfig {
 	public void setLanguage(String language) {
 		this.language = language;
 	}
-    
+	
+	public String getInitmail()
+	{
+		return this.initmail;
+	}
+	
+	public void setInitmail(String initmail)
+	{
+		this.initmail = initmail;
+	}
+	
+	public String getQuerymail()
+	{
+		return this.querymail;
+	}
+	
+	public void setQuerymail(String querymail)
+	{
+		this.querymail = querymail;
+	}	
 }

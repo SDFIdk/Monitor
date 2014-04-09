@@ -136,6 +136,14 @@
 		<servlet-class>
 		org.easysdi.monitor.gui.webapp.controllers.ServiceApiGroupStatusController</servlet-class>
 	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>JobStatus</display-name>
+		<servlet-name>JobStatus</servlet-name>
+		<servlet-class>
+		org.easysdi.monitor.gui.webapp.controllers.JobStatus</servlet-class>
+	</servlet>
 	
 
 	<servlet-mapping>
@@ -177,6 +185,10 @@
 	<servlet-mapping>
 		<servlet-name>ServiceApiGroupStatusController</servlet-name>
 		<url-pattern>/ServiceApiGroupStatusController</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>JobStatus</servlet-name>
+		<url-pattern>/JobStatus</url-pattern>
 	</servlet-mapping>
 	
 	

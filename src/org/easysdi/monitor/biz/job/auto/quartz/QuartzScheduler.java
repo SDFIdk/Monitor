@@ -3,6 +3,7 @@ package org.easysdi.monitor.biz.job.auto.quartz;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
+import org.easysdi.monitor.biz.alert.EmailAction;
 import org.easysdi.monitor.biz.job.Job;
 import org.easysdi.monitor.biz.job.JobConfiguration;
 import org.easysdi.monitor.biz.job.JobsCollection;
@@ -50,10 +51,7 @@ public class QuartzScheduler implements IJobScheduler {
      */
     public boolean scheduleJob(long jobId, Date startTime, int interval) {
         final JobDetail details = this.createJobDetails(jobId);
-        final Trigger autoTrigger 
-            = this.createTriggerForJob(jobId, startTime, interval, 
-                                       details.getName());
-
+        final Trigger autoTrigger = this.createTriggerForJob(jobId, startTime, interval, details.getName());
         return this.addToScheduler(details, autoTrigger);
     }
 
@@ -92,6 +90,8 @@ public class QuartzScheduler implements IJobScheduler {
             return true;
 
         } catch (SchedulerException e) {
+         	EmailAction action = new EmailAction(details.getName());
+        	action.sendAlertMail();
             this.logger.error(String.format("Unable to schedule the job '%1$s'",
                                        details.getName()),
                          e);
@@ -192,10 +192,9 @@ public class QuartzScheduler implements IJobScheduler {
             }
 
         } catch (SchedulerException e) {
-            this.logger.error(String.format(
-                   "An error occurred while the job '%1$s' was unscheduled.",
-                   autoJobName), e);
-
+          	EmailAction action = new EmailAction(autoJobName);
+        	action.sendAlertMail();
+        	this.logger.error(String.format("An error occurred while the job '%1$s' was unscheduled.",autoJobName), e);
             success = false;
         }
         
@@ -238,14 +237,20 @@ public class QuartzScheduler implements IJobScheduler {
      */
     public boolean scheduleAllJobs() {
         boolean success = true;
-
+        try
+        {
+        	EmailAction action = new EmailAction("tomcat_start");
+        	action.sendAlertMail();
+        }catch(Exception ex)
+        {
+        	
+        }
         for (Job job : new JobsCollection().getJobs()) {
 
-            if (!this.scheduleJob(job)) {
-                success = false;
+            if (!this.scheduleJob(job)) { 
+            	success = false;
             }
         }
-
         return success;
     }
 

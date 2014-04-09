@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.StringReader;
 //import java.io.InputStream;
 //import java.util.Properties;
+import java.text.SimpleDateFormat;
 import java.util.Set;
 
 import javax.xml.parsers.*;
@@ -21,6 +22,7 @@ import org.deegree.portal.owswatch.Status;
 import org.deegree.portal.owswatch.ValidatorResponse;
 import org.easysdi.monitor.biz.alert.AbstractAction;
 import org.easysdi.monitor.biz.alert.Alert;
+import org.easysdi.monitor.biz.alert.EmailAction;
 import org.easysdi.monitor.biz.job.Job;
 import org.easysdi.monitor.biz.job.JobConfiguration;
 import org.easysdi.monitor.biz.job.QueryResult;
@@ -245,6 +247,31 @@ public class MonitorServiceLog extends ServiceLog {
 			if (!LastLogDaoHelper.getLastLogDao().create(lastQueryEntry)) {
 				this.logger.error("An exception was thrown while saving a last log entry");
 			}
+			
+			try
+	        {
+				if(response.getStatus() != Status.RESULT_STATE_AVAILABLE || logEntry.getStatus().getStatusValue().equals(StatusValue.UNAVAILABLE))
+				{
+					EmailAction action = new EmailAction();
+		        	if(action.config.getQuerymail().equalsIgnoreCase("true"))
+		        	{
+		        		String time = "";
+		        		try
+		        		{
+		        			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		        			time = dateFormat.format(result.getRequestTime().getTime());
+		        		}catch(Exception ex)
+		        		{
+		        			
+		        		}
+		        		action.sendAlertJobMail(result.getParentQuery().getConfig().getParentJob(),result.getParentQuery(),time);
+		        	}
+	        	}	
+	        }catch(Exception ex)
+	        {
+	        	// Error
+	        }
+			
         }else
         {
         	if(this.saveTestResult)

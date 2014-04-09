@@ -1,6 +1,8 @@
 package org.easysdi.monitor.biz.alert;
 
+import java.net.InetAddress;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
@@ -16,6 +18,8 @@ import org.deegree.framework.mail.EMailMessage;
 import org.deegree.framework.mail.MailHelper;
 import org.deegree.framework.mail.SendMailException;
 import org.easysdi.monitor.biz.job.Job;
+import org.easysdi.monitor.biz.job.Query;
+import org.easysdi.monitor.biz.job.QueryParam;
 import org.easysdi.monitor.gui.i18n.Messages;
 
 /**
@@ -27,10 +31,10 @@ import org.easysdi.monitor.gui.i18n.Messages;
  */
 public class EmailAction extends AbstractAction {
 
-    private final EmailConfig config = new EmailConfig();
+    public final EmailConfig config = new EmailConfig();
     private final Logger      logger = Logger.getLogger(EmailAction.class);
     private Set<String>       recipients;
-    
+    private String jobname ="";
 
 
 
@@ -38,11 +42,14 @@ public class EmailAction extends AbstractAction {
      * No-argument constructor, used by the persistance mechanism.
      */
     @SuppressWarnings("unused")
-    private EmailAction() {
+	public EmailAction() {
 
     }
 
-
+    public EmailAction(String jobname)
+    {
+    	this.jobname = jobname;
+    }
 
     /**
      * Creates a new e-mail action.
@@ -71,7 +78,99 @@ public class EmailAction extends AbstractAction {
     protected void processTargetSpecific(String aTarget) {
         this.setRecipients(aTarget);
     }
+    
+    public void sendAlertMail()
+    {
+        final EmailConfig mailConfig = this.getConfig();
+        final String sender = mailConfig.getSenderAddress();
+        String receivers = mailConfig.getReciver();
+        this.setRecipients(receivers);
+        final String recipientsList = this.getRecipientsString();
+        EMailMessage message = null;
+        String hostname = "";
+        try
+        {
+        	hostname = InetAddress.getLocalHost().getHostName();
+        }catch(Exception ex)
+        {
+        	
+        }
+        if(this.jobname.equalsIgnoreCase("tomcat_start"))
+        {
+        	if(mailConfig.getInitmail().equalsIgnoreCase("true"))
+        	{
+        		message = new EMailMessage(sender, recipientsList,"Monitor service started or restarted","Tomcat server: Monitor is starting automatic jobs.\t\n\t\nMessage from Monitor service on: "+hostname);
+        	}else
+        	{
+        		return;	
+        	}
+    	}else
+        {
+        	message = new EMailMessage(sender, recipientsList,
+                    "The job: "+this.jobname+" is not running.", "Tomcat server: Restart the tomcat server thats is running Monitor or update the job.\t\n\t\nMessage from Monitor service on: "+hostname);
+        }
+         
+       try {
+	   		this.sendMail(message, mailConfig);
 
+       		} catch (SendMailException e) {
+       			this.logger.error("Unable to send alert e-mail", e);
+       	}
+    }
+    
+    public void sendAlertJobMail(Job job, Query query, String testtime)
+    {
+        final EmailConfig mailConfig = this.getConfig();
+        final String sender = mailConfig.getSenderAddress();
+        String receivers = mailConfig.getReciver();
+        this.setRecipients(receivers);
+        final String recipientsList = this.getRecipientsString();
+        String hostname = "";
+        try
+        {
+        	hostname = InetAddress.getLocalHost().getHostName();
+        }catch(Exception ex)
+        {
+        	
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append("GruopID: " + job.getJobId()); 
+        sb.append("\t\n");
+        sb.append("GruopName: "+job.getConfig().getJobName());
+        sb.append("\t\n");
+        sb.append("Requestname: "+query.getConfig().getQueryName());
+        sb.append("\t\n");
+        sb.append("\t\n");
+        sb.append("URL: "+query.getConfig().getUrl());
+        sb.append("\t\n");
+        String params = "";
+        for (QueryParam queryParam : (Set<QueryParam>) query.getConfig().getParams()) 
+        {
+        	if (params != "")
+        	{ 
+        		params = params + "&"; 
+        	}
+        	params = params + queryParam.getName() +"="+queryParam.getValue();
+        }    	
+        sb.append("Parameters:");
+        sb.append(params);
+        sb.append("\t\n");
+        sb.append("\t\n");
+        sb.append("\t\n");
+        sb.append("Status: UNAVAILABLE");
+        sb.append("\t\n");
+        sb.append("Runtime: "+testtime);
+        sb.append("\t\n");
+        sb.append("Alert mail fra monitor on: "+hostname);
+        EMailMessage message = new EMailMessage(sender, recipientsList,
+        "The query: "+query.getConfig().getQueryName()+" is UNAVAILABLE",sb.toString());
+               
+       try {
+	   		this.sendMail(message, mailConfig);
+       		} catch (SendMailException e) {
+       			this.logger.error("Unable to send alert e-mail", e);
+       	}
+    }
 
 
     /**
@@ -134,17 +233,14 @@ public class EmailAction extends AbstractAction {
      * @throws  SendMailException   an lower-level error occurred while sending
      *                              the message
      */
-    private void sendMail(final EMailMessage message,
-                          final EmailConfig mailConfig) 
+    private void sendMail(final EMailMessage message, final EmailConfig mailConfig) 
         throws SendMailException {
         
         final String host = mailConfig.getSmtpHost();
         final String userName = mailConfig.getSmtpUserName();
 
         if (StringUtils.isNotBlank(userName)) {
-            MailHelper.createAndSendMail(message, host, userName,
-                                         mailConfig.getSmtpPassword());
-            
+            MailHelper.createAndSendMail(message, host, userName, mailConfig.getSmtpPassword());
         } else {
             MailHelper.createAndSendMail(message, host);
         }

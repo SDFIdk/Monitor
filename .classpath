@@ -9,7 +9,6 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/antlr-2.7.6.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/com.springsource.net.sf.cglib-2.2.0.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/com.springsource.org.aopalliance-1.0.0.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-httpclient-2.0.2-deegreeversion.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-lang-2.1.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-logging.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/dom4j-1.6.1.jar"/>
@@ -70,5 +69,6 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/saxon9he.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/xalan.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-net-3.3.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-httpclient-2.0.2-deegreeversion.jar"/>
 	<classpathentry kind="output" path="WebContent/WEB-INF/classes"/>
 </classpath>
