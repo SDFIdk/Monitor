@@ -24,6 +24,7 @@ public class EmailConfig {
     private String recivers;
     private String initmail;
     private String querymail;
+    private String outOfOder;
 
 	/**
      * Instantiates the configuration.
@@ -72,6 +73,7 @@ public class EmailConfig {
         this.setReciver(emailProps.getProperty("recivers"));
         this.setInitmail(emailProps.getProperty("initmail"));
         this.setQuerymail(emailProps.getProperty("querymail"));
+        this.setOutOfOder(emailProps.getProperty("outofordermail"));
     }
 
 
@@ -198,5 +200,15 @@ public class EmailConfig {
 	public void setQuerymail(String querymail)
 	{
 		this.querymail = querymail;
-	}	
+	}
+	
+	public String getOutOfOder()
+	{
+		return this.outOfOder;
+	}
+	
+	public void setOutOfOder(String outOfOder)
+	{
+		this.outOfOder = outOfOder;
+	}
 }

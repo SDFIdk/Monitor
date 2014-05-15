@@ -6,13 +6,15 @@ import java.io.StringReader;
 //import java.io.InputStream;
 //import java.util.Properties;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.Set;
 
 import javax.xml.parsers.*;
+
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
-
 import org.w3c.dom.traversal.NodeIterator;
+
 import com.sun.org.apache.xpath.internal.XPathAPI;
 
 import org.apache.log4j.Logger;
@@ -30,7 +32,6 @@ import org.easysdi.monitor.biz.job.QueryTestResult;
 import org.easysdi.monitor.biz.job.QueryValidationResult;
 import org.easysdi.monitor.biz.job.QueryValidationSettings;
 import org.easysdi.monitor.dat.dao.LogDaoHelper;
-
 import org.easysdi.monitor.biz.job.OverviewLastQueryResult;
 import org.easysdi.monitor.biz.job.Status.StatusValue;
 import org.easysdi.monitor.dat.dao.LastLogDaoHelper;
@@ -51,6 +52,8 @@ public class MonitorServiceLog extends ServiceLog {
     private boolean           resultLogging;
     private boolean           saveTestResult = false;
     private QueryResult       lastResult;
+    
+	private static HashMap<Long,String> last_status = new HashMap<Long,String>();
 
 
 
@@ -250,23 +253,50 @@ public class MonitorServiceLog extends ServiceLog {
 			
 			try
 	        {
-				if(response.getStatus() != Status.RESULT_STATE_AVAILABLE || logEntry.getStatus().getStatusValue().equals(StatusValue.UNAVAILABLE))
+				StatusValue svalue = logEntry.getStatus().getStatusValue();
+				if(response.getStatus() != Status.RESULT_STATE_AVAILABLE || svalue.equals(StatusValue.UNAVAILABLE) || svalue.equals(StatusValue.OUT_OF_ORDER))
 				{
 					EmailAction action = new EmailAction();
-		        	if(action.config.getQuerymail().equalsIgnoreCase("true"))
-		        	{
-		        		String time = "";
-		        		try
-		        		{
-		        			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		        			time = dateFormat.format(result.getRequestTime().getTime());
-		        		}catch(Exception ex)
-		        		{
-		        			
-		        		}
-		        		action.sendAlertJobMail(result.getParentQuery().getConfig().getParentJob(),result.getParentQuery(),time);
-		        	}
-	        	}	
+					boolean cancel = false;
+					if(action.config.getOutOfOder().equalsIgnoreCase("false") && svalue.equals(StatusValue.OUT_OF_ORDER))
+					{
+						cancel = true;
+					}
+					if(!cancel && sendMailStatus(logEntry.getQueryId(),true))
+					{
+			        	if(action.config.getQuerymail().equalsIgnoreCase("true"))
+			        	{
+			        		String time = "";
+			        		try
+			        		{
+			        			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			        			time = dateFormat.format(result.getRequestTime().getTime());
+			        		}catch(Exception ex)
+			        		{
+			        		}
+			        		action.sendAlertJobMail(result.getParentQuery().getConfig().getParentJob(),result.getParentQuery(),time,svalue.name());
+			        	}
+					}
+	        	}else if (response.getStatus() == Status.RESULT_STATE_AVAILABLE || svalue.equals(StatusValue.AVAILABLE))
+	        	{
+	        		// Send mail if status has changed
+	        		if(sendMailStatus(logEntry.getQueryId(),false))
+	        		{
+	        			EmailAction action = new EmailAction();
+			        	if(action.config.getQuerymail().equalsIgnoreCase("true"))
+			        	{
+			        		String time = "";
+			        		try
+			        		{
+			        			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			        			time = dateFormat.format(result.getRequestTime().getTime());
+			        		}catch(Exception ex)
+			        		{	
+			        		}
+			        		action.sendAlertJobMail(result.getParentQuery().getConfig().getParentJob(),result.getParentQuery(),time,"AVAILABLE");
+			        	}
+	        		}
+	        	}
 	        }catch(Exception ex)
 	        {
 	        	// Error
@@ -313,6 +343,34 @@ public class MonitorServiceLog extends ServiceLog {
         		}
         	}
         }
+    }
+    
+    private boolean sendMailStatus(long queryID, boolean failed)
+    {
+    	String value = last_status.get(queryID);
+    	// System.out.println(last_status.size()+" "+value+" "+failed);
+      	// System.out.println("");
+    	if(value != null)
+    	{
+    		if(failed)
+    		{
+    			return false;
+    		}else
+    		{
+    			last_status.remove(queryID);
+    			return true;
+    		}
+    	}else
+    	{
+    		if(failed)
+    		{
+    			last_status.put(queryID,"error");
+    			return true;
+    		}else
+    		{
+    			return false;
+    		}
+    	}
     }
     
     private void triggerActions(Alert alert,Job parentJob) {

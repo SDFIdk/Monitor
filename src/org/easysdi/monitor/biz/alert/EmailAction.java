@@ -118,7 +118,7 @@ public class EmailAction extends AbstractAction {
        	}
     }
     
-    public void sendAlertJobMail(Job job, Query query, String testtime)
+    public void sendAlertJobMail(Job job, Query query, String testtime,String status)
     {
         final EmailConfig mailConfig = this.getConfig();
         final String sender = mailConfig.getSenderAddress();
@@ -157,13 +157,13 @@ public class EmailAction extends AbstractAction {
         sb.append("\t\n");
         sb.append("\t\n");
         sb.append("\t\n");
-        sb.append("Status: UNAVAILABLE");
+        sb.append("Status: "+status);
         sb.append("\t\n");
         sb.append("Runtime: "+testtime);
         sb.append("\t\n");
         sb.append("Alert mail fra monitor on: "+hostname);
         EMailMessage message = new EMailMessage(sender, recipientsList,
-        "The query: "+query.getConfig().getQueryName()+" is UNAVAILABLE",sb.toString());
+        "The query: "+query.getConfig().getQueryName()+" is "+status,sb.toString());
                
        try {
 	   		this.sendMail(message, mailConfig);
