@@ -119,3 +119,19 @@ p {
 #pGraphChoices, #pGraphChoices2 {
 	font-size: 12px;
 }
+
+#divReportGraph2 .flot-x-axis  {
+	border: 1px solid green;
+}
+
+#divReportGraph2 .flot-x-axis .flot-tick-label {
+	margin-top: -120px;
+	color: white;
+	font-weight: bold;
+	letter-spacing: 3px;
+	transform: rotate(90deg);
+    -ms-transform:rotate(90deg); /* IE 9 */
+    -moz-transform:rotate(90deg); /* Firefox */
+    -webkit-transform:rotate(90deg); /* Safari and Chrome */
+    -o-transform:rotate(90deg); /* Opera */
+}

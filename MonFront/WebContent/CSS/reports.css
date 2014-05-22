@@ -1,0 +1,96 @@
+﻿
+.request,
+.request-agglog,	
+.request-agglog-logs {
+	background: #fff;
+	padding: 0px;	
+	border-left: 2px solid transparent;
+	margin: 0px 0px 0px -2px;
+	border-left: 2px solid transparent;
+	border-bottom: 1px solid #eee;
+}
+.request:last-child,
+.request-agglog:last-child,	
+.request-agglog-logs:last-child {
+	border-bottom: 0px;
+}
+
+.request:hover,
+.request-agglog:hover,
+.request-agglog-logs:hover
+ {
+	background: #efefef;
+	cursor: pointer;
+	border-left: 2px solid #ddd;
+}
+
+.request {
+	text-indent: 5px;
+	padding: 4px 0px;
+}
+.request-status,
+.request-agglog-status {
+	float: right;
+	margin-right: 20px;
+	width: 100px;
+}
+
+.request-agglog {
+	text-indent: 20px;
+	padding: 1px 0px;	
+}
+.request-agglog:first-child {
+	border-top: 1px solid #eee;
+	margin-top: 4px;
+}
+.request-agglog-logs:first-child {
+	margin-top: 2px;
+}
+.request-agglog-logs:last-child {
+	
+}
+.request-agglog-logs {
+	text-indent: 60px;
+}
+.request-agglog-logs-log {
+	padding: 2px 0px;
+}
+.request-agglog-logs-log:last-child {
+	padding-bottom: 4px;
+}
+.request-agglog-logs-log:hover {	
+	background: white;
+}
+
+.request  {
+	font-family: "Courier";
+	font-size: 12px;
+}
+
+.request-agglog-logs-log-min,
+.request-agglog-logs-log-max,
+.request-agglog-logs-log-length {
+	float: left;
+	width: 100px;
+	
+}
+.request-agglog-logs-log-message {
+	/*float: right;*/
+}
+
+.request-agglog-logs-log-min:after {
+	content: "-";
+	padding-left: 15px;
+}
+.request-agglog-logs-log-max:after {
+	content: "=";
+	padding-left: 20px;
+}
+
+
+.good.request-agglog {
+	color: green;
+}
+.bad.request-agglog {
+	color: red;
+}
