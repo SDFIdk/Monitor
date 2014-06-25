@@ -93,8 +93,10 @@ function Report_GetReportDataQuery() {
     Notice that any selected service in sbReportRequest will be ignored.
     */
 
-    serviceUrl = CONST_BASEURL + "serviceapi/groups/" + $("#sbReportGroup option:selected").text() + "/stats/?minDate=" + $("#tbPeriodFrom").val() + "&maxDate=" + $("#tbPeriodTo").val() + "&jsonpCallback=?";
-
+    serviceUrl = CONST_BASEURL + "serviceapi/groups/" + $("#sbReportGroup option:selected").text() + "/stats/?minDate=" + $("#tbPeriodFrom").val() + "&maxDate=" + $("#tbPeriodTo").val(); // + "&jsonpCallback=?";
+    if ($("#sbReportSLA :selected").val() != "_nosla") {
+        serviceUrl += "&useSla=" + $("#sbReportSLA :selected").val();
+    }
     // Show Service Health chart (stacked bar chart)
     showServiceHealthChart(serviceUrl);
 
@@ -157,11 +159,12 @@ function Report_GetReportDataAll() {
     Notice that any selected service in sbReportRequest will be ignored.
     */
 
-    serviceUrl = CONST_BASEURL + "serviceapi/groups/" + $("#sbReportGroup option:selected").text() + "/stats/?minDate=" + $("#tbPeriodFrom").val() + "&maxDate=" + $("#tbPeriodTo").val() + "&jsonpCallback=?";
-
+    serviceUrl = CONST_BASEURL + "serviceapi/groups/" + $("#sbReportGroup option:selected").text() + "/stats/?minDate=" + $("#tbPeriodFrom").val() + "&maxDate=" + $("#tbPeriodTo").val(); // + "&jsonpCallback=?";
+    if ($("#sbReportSLA :selected").val() != "_nosla") {
+        serviceUrl += "&useSla=" + $("#sbReportSLA :selected").val();
+    }
     // Show Service Health chart (stacked bar chart)
     showServiceHealthChart(serviceUrl);
-
 
 }
 

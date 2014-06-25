@@ -146,16 +146,14 @@ public class QueryAggregLogController extends AbstractMonitorController {
                              @PathVariable String queryIdString)
         throws MonitorInterfaceException {
 
-        final Map<String, String> requestParams
-            = this.getRequestParametersMap(request);
-        final LogSearchParams searchParams 
-            = LogSearchParams.createFromParametersMap(requestParams);
+        final Map<String, String> requestParams = this.getRequestParametersMap(request);
+        final LogSearchParams searchParams = LogSearchParams.createFromParametersMap(requestParams);
         final String altParam = request.getParameter("alt");
         final String contentType = request.getHeader("Content-Type");
         String viewName = "aggregLogsJson";
-
-        if ((null != altParam && altParam.equals("csv"))
-            || (null != contentType && contentType.equals("text/csv"))) {
+        
+        // Report draft
+        if ((null != altParam && altParam.equals("csv")) || (null != contentType && contentType.equals("text/csv"))) {
         	
         	if(requestParams.get("useSla") != null)
         	{
@@ -168,49 +166,61 @@ public class QueryAggregLogController extends AbstractMonitorController {
         {
         	viewName = "aggregHourLogsJson";
         }
+        
+        boolean serviceLog = false;
+        if(requestParams.get("servicelog") != null)
+        {
+        	serviceLog = true;
+        	if(requestParams.get("useSla") != null)
+        	{
+        		viewName = "aggregDayJson";
+        	}
+        }
 
         final ModelAndView result = new ModelAndView(viewName);
 
-        final Query query = this.getQueryProtected(jobIdString, queryIdString, 
-                                                   request, response);
+        final Query query = this.getQueryProtected(jobIdString, queryIdString, request, response);
         final LogManager logManager = new LogManager(query);
         Map<Date, AbstractAggregateHourLogEntry> logHourEntries;
         Map<Date, AbstractAggregateLogEntry> logEntries;
         
+      
         String slaName = "Default";
         if(requestParams.get("useSla") != null)
         {
-        	logHourEntries = logManager.getAggregHourLogsSubset(searchParams.getMinDate(),
-                    searchParams.getMaxDate(),
-                    searchParams.getMaxResults(),
-                    searchParams.getStartIndex());
+        	logHourEntries = logManager.getAggregHourLogsSubset(searchParams.getMinDate(),searchParams.getMaxDate(),
+                    searchParams.getMaxResults(),searchParams.getStartIndex());
         	logHourEntries = LogSlaHelper.getAggHourLogForSla(requestParams.get("useSla"), logHourEntries);
+       
+        	
         	slaName = Sla.getFromIdString(requestParams.get("useSla")).getName();
-        	
-        	result.addObject("noPagingCount", 
-                    logManager.getAggregateHourLogsItemsNumber(
-                           searchParams.getMinDate(), searchParams.getMaxDate(), 
-                           null, null));
-        	result.addObject("message", "log.details.success");
-        	result.addObject("aggregHourLogsCollection", logHourEntries.values());
-        	
+        	if(serviceLog)
+        	{
+        		result.addObject("message", "log.details.success");
+        		result.addObject("aggregDayCollection", logHourEntries.values());
+        	}else
+        	{
+        		result.addObject("noPagingCount", logManager.getAggregateHourLogsItemsNumber(searchParams.getMinDate(), searchParams.getMaxDate(), null, null));
+        		result.addObject("message", "log.details.success");
+        		result.addObject("aggregHourLogsCollection", logHourEntries.values());
+        	}
         }else
         {
-        	logEntries = logManager.getAggregLogsSubset(searchParams.getMinDate(),
-                                             searchParams.getMaxDate(),
-                                             searchParams.getMaxResults(),
-                                             searchParams.getStartIndex());
+        	logEntries = logManager.getAggregLogsSubset(searchParams.getMinDate(),searchParams.getMaxDate(),searchParams.getMaxResults(),searchParams.getStartIndex());
         
         	  if (null == logEntries) {
                   logEntries = new LinkedHashMap<Date, AbstractAggregateLogEntry>();
               }
-        	  
-              result.addObject("noPagingCount", 
-                      logManager.getAggregateLogsItemsNumber(
-                             searchParams.getMinDate(), searchParams.getMaxDate(), 
-                             null, null));
-             result.addObject("message", "log.details.success");
-             result.addObject("aggregLogsCollection", logEntries.values());
+        	  if(serviceLog)
+        	  {    		  
+        		  result.addObject("message", "log.details.success");
+        		  result.addObject("aggregDayLogsCollection", logEntries.values());
+        	  }else
+        	  {
+        		  result.addObject("noPagingCount", logManager.getAggregateLogsItemsNumber(searchParams.getMinDate(), searchParams.getMaxDate(),null, null));
+        		  result.addObject("message", "log.details.success");
+        		  result.addObject("aggregLogsCollection", logEntries.values());
+        	  }
         }
         
         if(requestParams.get("export") != null)

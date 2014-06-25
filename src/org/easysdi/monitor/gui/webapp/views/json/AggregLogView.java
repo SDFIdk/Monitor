@@ -114,7 +114,18 @@ public class AggregLogView extends AbstractJsonView {
             	}    
             	return jsonLogsCollection;
             }
-        }         
+        }
+        if (model.containsKey("aggregDayLogsCollection")) {
+        	final Collection<AbstractAggregateLogEntry> logsCollection = (Collection<AbstractAggregateLogEntry>) model.get("aggregDayLogsCollection");
+        	final ObjectMapper mapper = this.getObjectMapper();
+        	final ArrayNode jsonLogsCollection = mapper.createArrayNode();
+         	List<AbstractAggregateLogEntry> sortLogs = new ArrayList<AbstractAggregateLogEntry>(logsCollection);
+    		Collections.sort(sortLogs, new MyLogAggComparable());
+        	for (AbstractAggregateLogEntry logEntry : sortLogs) {
+        		jsonLogsCollection.add(AggregLogSerializer.serialize(logEntry,mapper,true));
+        	}    
+        	return jsonLogsCollection;
+        }
         throw new MonitorInterfaceException("An internal error occurred",
                                             "internal.error");
     }

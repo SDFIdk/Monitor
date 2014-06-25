@@ -3,6 +3,7 @@
  */
 package org.easysdi.monitor.gui.webapp;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -67,6 +68,8 @@ public final class LogSlaHelper {
     		Calendar logDate = DateUtil.dateToCalendar(dateKey);
     		AbstractAggregateHourLogEntry logObject = entry.getValue();
     		includeLog = false;
+    	    final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+    	    System.out.println("Day: "+dateFormat.format(logDate.getTime()));
     		for(Period period: periods)
     		{
         		if(period.isInclude())
@@ -507,10 +510,12 @@ public final class LogSlaHelper {
 	{
 		boolean result = false;	
 		// Test for time 00.00.00
+		boolean endtimeSLA = false;
 		Calendar zeroTime = DateUtil.setTime(slaEndTime, "00:00:00");
 		if(slaEndTime.getTime().equals(zeroTime.getTime()))
 		{
 			slaEndTime = DateUtil.setTime(slaEndTime, "23:59:59");
+			endtimeSLA = true;
 		}	
 		Boolean minInterval = false;
 		Boolean maxInterval = false;
@@ -520,6 +525,9 @@ public final class LogSlaHelper {
 		}
 		System.out.println("LogHour: "+logTime.get(Calendar.HOUR_OF_DAY) + " TimeHour: "+slaEndTime.get(Calendar.HOUR_OF_DAY));
 		if(logTime.get(Calendar.HOUR_OF_DAY) < slaEndTime.get(Calendar.HOUR_OF_DAY))
+		{
+			maxInterval = true;
+		}else if(endtimeSLA && logTime.get(Calendar.HOUR_OF_DAY) == slaEndTime.get(Calendar.HOUR_OF_DAY))
 		{
 			maxInterval = true;
 		}

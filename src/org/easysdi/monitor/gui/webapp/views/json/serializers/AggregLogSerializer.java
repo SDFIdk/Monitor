@@ -1,6 +1,7 @@
 package org.easysdi.monitor.gui.webapp.views.json.serializers;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -77,8 +78,7 @@ public class AggregLogSerializer {
     public static JsonNode serialize(AbstractAggregateLogEntry entry, 
                                      ObjectMapper mapper, String jobName,
                                      String queryName) {
-
-    	
+  	
     	final ObjectNode jsonEntry = mapper.createObjectNode();
 
         final AggregateStats h24Stats = entry.getH24Stats();
@@ -112,6 +112,28 @@ public class AggregLogSerializer {
         jsonEntry.put("h24connerrors", h24Stats.getNbConnErrors());
         jsonEntry.put("slabizerrors", slaStats.getNbBizErrors());
         jsonEntry.put("h24bizerrors", h24Stats.getNbBizErrors());
+        return jsonEntry;
+    }
+    
+    /**
+     * Generates the JSON representation of an aggregate log entry.
+     * 
+     * @param   entry   the aggregate log entry to represent
+     * @param   mapper  the JSON object used to map the data to JSON nodes
+     * @return          the JSON node containing the data for the entry
+     */
+    public static JsonNode serialize(AbstractAggregateLogEntry entry, 
+                                     ObjectMapper mapper,boolean daily) {
+        final ObjectNode jsonEntry = mapper.createObjectNode();
+        final AggregateStats h24Stats = entry.getH24Stats();
+    	Calendar temp = entry.getLogDate();
+		temp.set(Calendar.HOUR_OF_DAY, 0);
+		temp.set(Calendar.MINUTE, 0);
+		temp.set(Calendar.SECOND, 0);  
+		temp.set(Calendar.MILLISECOND, 0);
+        final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        jsonEntry.put("unavailability", h24Stats.getUnavailability()); 
+        jsonEntry.put("date", dateFormat.format(temp.getTime()));
         return jsonEntry;
     }
 }
