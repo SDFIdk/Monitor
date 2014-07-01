@@ -68,8 +68,8 @@ public final class LogSlaHelper {
     		Calendar logDate = DateUtil.dateToCalendar(dateKey);
     		AbstractAggregateHourLogEntry logObject = entry.getValue();
     		includeLog = false;
-    	    final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-    	    System.out.println("Day: "+dateFormat.format(logDate.getTime()));
+    	    //final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+    	   // System.out.println("Day: "+dateFormat.format(logDate.getTime()));
     		for(Period period: periods)
     		{
         		if(period.isInclude())
@@ -523,7 +523,7 @@ public final class LogSlaHelper {
 		{
 			minInterval = true;
 		}
-		System.out.println("LogHour: "+logTime.get(Calendar.HOUR_OF_DAY) + " TimeHour: "+slaEndTime.get(Calendar.HOUR_OF_DAY));
+	//	System.out.println("LogHour: "+logTime.get(Calendar.HOUR_OF_DAY) + " TimeHour: "+slaEndTime.get(Calendar.HOUR_OF_DAY));
 		if(logTime.get(Calendar.HOUR_OF_DAY) < slaEndTime.get(Calendar.HOUR_OF_DAY))
 		{
 			maxInterval = true;
