@@ -64,5 +64,9 @@ public interface IJobScheduler {
      *                  unscheduled
      */
     boolean unscheduleJob(long jobId);
-
+    
+    /**
+     * Updates schedule time for a job with errorinterval is useErrorInterval is true 
+    */
+    public boolean updateScheduleJobTime(Job job, boolean useErrorInterval);
 }

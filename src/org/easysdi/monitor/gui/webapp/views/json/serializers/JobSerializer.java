@@ -87,6 +87,9 @@ public class JobSerializer {
         jsonJob.put("lastStatusUpdate", dateFormat.format(this.getJob().getStatusUpdateTime().getTime()));
         jsonJob.put("saveResponse",jobConfig.getSaveResponse());
         jsonJob.put("runSimultaneous",jobConfig.isRunSimultaneous());
+        jsonJob.put("testIntervalDown", jobConfig.getTestIntervalDown());
+        jsonJob.put("useTestIntervalDown", jobConfig.getUseTestIntervalDown());
+        
         
         if (includeQueries) {
             jsonJob.put("queries", 

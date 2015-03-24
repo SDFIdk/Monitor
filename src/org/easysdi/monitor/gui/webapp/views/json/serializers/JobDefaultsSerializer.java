@@ -71,7 +71,12 @@ public class JobDefaultsSerializer {
         jsonParamsCollection.put(
         		"saveResponse",
         		paramsMap.get("SAVE_RESPONSE").getStringValue());
-       
+        jsonParamsCollection.put(
+        		"testIntervalDown",
+        		paramsMap.get("TEST_INTERVAL_DOWN").getStringValue());
+        jsonParamsCollection.put(
+        		"useTestIntervalDown", 
+        		paramsMap.get("USE_TEST_INTERVAL_DOWN").getStringValue());
         
 
         return jsonParamsCollection;

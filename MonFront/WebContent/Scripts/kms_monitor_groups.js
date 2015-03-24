@@ -111,7 +111,9 @@ function FillFormWithGroupInfo(data) {
         $("#cbGroupsHttpErrors").attr("checked", data.httpErrors);
         //$("#cbGroupsBizErrors").attr("checked", data.bizErrors);
         $("#cbGroupsSaveResponse").attr("checked", data.saveResponse);
-        $("#cbRunSimultaneous").attr("checked", data.runSimultaneous)
+        $("#cbRunSimultaneous").attr("checked", data.runSimultaneous);
+        $("#cbGroupsUseTestIntervalDown").attr("checked", data.useTestIntervalDown);
+        $("#bnGroupsTestIntervalDown").val(data.testIntervalDown);
     }
 }
 
@@ -136,8 +138,8 @@ function CollectGroupInfoFromForm(_mode) {
     data.data["httpErrors"] = $("#cbGroupsHttpErrors").is(':checked');
     data.data["bizErrors"] = false;//$("#cbGroupsBizErrors").is(':checked');
     data.data["saveResponse"] = $("#cbGroupsSaveResponse").is(':checked');
-    data.data["runSimultaneous"] = $("#cbRunSimultaneous").is(':checked');
-
+    data.data["useTestIntervalDown"] = $("#cbGroupsUseTestIntervalDown").is(':checked');
+    data.data["testIntervalDown"] = $("#bnGroupsTestIntervalDown").val();
     return data;
 }
 
@@ -152,7 +154,8 @@ function InitGroupForm() {
     $("#bnGroupsTimeout").val("30");
     $("#cbGroupsIsAutomatic").attr("checked", true);
     $("#cbGroupsHttpErrors").attr("checked", true);
-    
+    $("#cbGroupsUseTestIntervalDown").attr("checked",false);
+    $("#bnGroupsTestIntervalDown").val("30");
     
 }
 

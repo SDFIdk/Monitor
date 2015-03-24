@@ -7,6 +7,7 @@ import java.io.StringReader;
 //import java.util.Properties;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Set;
 
 import javax.xml.parsers.*;
@@ -54,8 +55,7 @@ public class MonitorServiceLog extends ServiceLog {
     private QueryResult       lastResult;
     
 	private static HashMap<Long,String> last_status = new HashMap<Long,String>();
-
-
+	private static HashMap<String,String> unavailable_status = new HashMap<String, String>();
 
     /**
      * Creates a new logger for Monitor queries.
@@ -240,6 +240,7 @@ public class MonitorServiceLog extends ServiceLog {
 				this.logger.error("An exception was thrown while saving alert: "+e.getMessage());
 			}
 			
+			
 			//System.out.println("BEFORE SAVE: "+logEntry.getQueryId()+" "+logEntry.getRequestTime());
 			// Save raw log	PROBLEM HERE WITH MANY REQUEST
 			if (!LogDaoHelper.getLogDao().persistRawLog(logEntry)) {
@@ -250,10 +251,10 @@ public class MonitorServiceLog extends ServiceLog {
 			if (!LastLogDaoHelper.getLastLogDao().create(lastQueryEntry)) {
 				this.logger.error("An exception was thrown while saving a last log entry");
 			}
-			
+			StatusValue svalue = null;
 			try
 	        {
-				StatusValue svalue = logEntry.getStatus().getStatusValue();
+				svalue = logEntry.getStatus().getStatusValue();
 				if(response.getStatus() != Status.RESULT_STATE_AVAILABLE || svalue.equals(StatusValue.UNAVAILABLE) || svalue.equals(StatusValue.OUT_OF_ORDER))
 				{
 					EmailAction action = new EmailAction();
@@ -277,6 +278,8 @@ public class MonitorServiceLog extends ServiceLog {
 			        		action.sendAlertJobMail(result.getParentQuery().getConfig().getParentJob(),result.getParentQuery(),time,svalue.name());
 			        	}
 					}
+					// unavailable_status
+					
 	        	}else if (response.getStatus() == Status.RESULT_STATE_AVAILABLE || svalue.equals(StatusValue.AVAILABLE))
 	        	{
 	        		// Send mail if status has changed
@@ -301,6 +304,24 @@ public class MonitorServiceLog extends ServiceLog {
 	        {
 	        	// Error
 	        }
+			
+			try{
+				Job currentJob = result.getParentQuery().getConfig().getParentJob();
+				// Test if job interval should use a different when unavailable
+				if(currentJob.getConfig().getUseTestIntervalDown())
+				{
+					if(currentJob.getConfig().getUseTestIntervalDown() && (response.getStatus() != Status.RESULT_STATE_AVAILABLE || svalue.equals(StatusValue.UNAVAILABLE)))
+					{
+						this.setUnavailableStatus(currentJob,logEntry.getQueryId(), true);
+					}else
+					{
+						this.setUnavailableStatus(currentJob,logEntry.getQueryId(), false);
+					}
+				}
+			}catch(Exception e)
+			{
+				 this.logger.error("An exception was thrown while updating time");
+			}
 			
         }else
         {
@@ -345,11 +366,11 @@ public class MonitorServiceLog extends ServiceLog {
         }
     }
     
+    
     private boolean sendMailStatus(long queryID, boolean failed)
     {
     	String value = last_status.get(queryID);
     	// System.out.println(last_status.size()+" "+value+" "+failed);
-      	// System.out.println("");
     	if(value != null)
     	{
     		if(failed)
@@ -369,6 +390,83 @@ public class MonitorServiceLog extends ServiceLog {
     		}else
     		{
     			return false;
+    		}
+    	}
+    }
+    
+    private void setUnavailableStatus(Job job,long queryID, boolean failed)
+    {
+    	String keyVal = Long.toString(job.getJobId()) +"_"+queryID;
+    	String value = unavailable_status.get(keyVal);	
+    	if(value != null)
+    	{
+    		if(failed)
+    		{
+    			return;
+    		}else
+    		{
+    			unavailable_status.remove(keyVal);
+    			Set<String> keySet = unavailable_status.keySet();
+        		Iterator<String> keys = keySet.iterator();
+        		boolean jobIsChecked = false;
+        		while(keys.hasNext())
+        		{
+        			 String key = keys.next();
+        			 String[] values = key.split("_");
+        			 if(values.length > 1)
+        			 {
+        				 String val = Long.toString(job.getJobId());
+        				 if(values[0].equals(val))
+        				 {
+        					 jobIsChecked = true;
+        				 }
+        			 }
+        		}
+        		if(jobIsChecked)
+        		{	
+        			return;
+        		}
+        		
+    			// change scheduleJob back to normal
+    			//System.out.println("JOB OK: "+keyVal);
+    			job.updateScheduleStateTime(false);
+    			return;
+    		}
+    	}else
+    	{
+    		// Check
+    		Set<String> keySet = unavailable_status.keySet();
+    		Iterator<String> keys = keySet.iterator();
+    		boolean jobIsChecked = false;
+    		while(keys.hasNext())
+    		{
+    			 String key = keys.next();
+    			 String[] values = key.split("_");
+    			 if(values.length > 1)
+    			 {
+    				 String val = Long.toString(job.getJobId());
+    				 if(values[0].equals(val))
+    				 {
+    					 jobIsChecked = true;
+    				 }
+    			 }
+    			
+    		}
+    		if(jobIsChecked)
+    		{
+    			unavailable_status.put(keyVal,"error");
+    			return;
+    		}
+    		
+    		if(failed)
+    		{
+    			//System.out.println("Change JOB"+keyVal);
+    			unavailable_status.put(keyVal,"error");
+    			job.updateScheduleStateTime(true);
+    			return;
+    		}else
+    		{
+    			return;
     		}
     	}
     }

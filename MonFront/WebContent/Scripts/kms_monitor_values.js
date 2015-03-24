@@ -1,7 +1,7 @@
 // Constants
 var CONST_USR = "admin";
 var CONST_PWD = "adm";
-var CONST_BASEURL = "http://localhost:8083/Monitor/";
+var CONST_BASEURL = "http://localhost:8080/Monitor/";
 //"http://kmsload49.kmsext.dk:8080/Monitor/";
 
 var KMSMonitor_ServiceTypes = {

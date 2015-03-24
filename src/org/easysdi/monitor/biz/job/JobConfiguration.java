@@ -41,6 +41,8 @@ public final class JobConfiguration {
     private String      url;
     private boolean		saveResponse;
     private boolean 	runSimultaneous;
+    private int testIntervalDown;
+    private boolean useTestIntervalDown;
 
 
 
@@ -602,7 +604,40 @@ public final class JobConfiguration {
 	public void setRunSimultaneous(boolean runSimultaneous) {
 		this.runSimultaneous = runSimultaneous;
 	}
-
+	
+	/**
+     * Gets the jobs test interval time when having errors
+     * 
+	 * @return  <code>true</code>
+	 */
+	public boolean getUseTestIntervalDown(){
+		return this.useTestIntervalDown;
+	}
+	
+	/**
+	 * Sets if the jobs queries should use test interval when job is failing
+	 * @param   useTestIntervalDown  <code>true</code>
+	 */
+	public void setUseTestIntervalDown(boolean useTestIntervalDown){
+		this.useTestIntervalDown = useTestIntervalDown;
+	}
+	
+	/**
+     * Gets the test interval time when job have errors
+     * 
+	 * @return  <code>int</code>
+	 */
+	public int getTestIntervalDown(){
+		return this.testIntervalDown;
+	}
+	
+	/**
+	 * Sets the jobs queries test interval when job is failing
+	 * @param   useTestIntervalDown  <code>int</code>
+	 */
+	public void setTestIntervalDown(int testIntervalDown){
+		this.testIntervalDown = testIntervalDown;
+	}
 
 
 	/**
@@ -792,6 +827,12 @@ public final class JobConfiguration {
             this.defineProperty(defaultParams, "SLA_END_TIME", 
                            this.getClass().getMethod("setSlaEndTime", 
                         		   GregorianCalendar.class));
+            
+            this.defineProperty(defaultParams, "TEST_INTERVAL_DOWN",
+            		this.getClass().getMethod("setTestIntervalDown", int.class));
+            
+            this.defineProperty(defaultParams, "USE_TEST_INTERVAL_DOWN",
+            		this.getClass().getMethod("setUseTestIntervalDown", boolean.class));
 
         } catch (NoSuchMethodException e) {
             this.logger.warn(String.format(

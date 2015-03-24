@@ -40,6 +40,8 @@ public class JobDefaultsInfo {
     private Integer      timeout;
     private Boolean		 saveResponse;
     private Boolean      runSimultaneous;
+    private int 		 testIntervalDown;
+    private boolean      useTestIntervalDown;
     
 
     /**
@@ -221,6 +223,24 @@ public class JobDefaultsInfo {
 	private void setRunSimultaneous(String runSimultaneous) {
 		this.runSimultaneous = BooleanUtil.parseBooleanStringWithNull(runSimultaneous);
 	}
+	
+	/**
+     * Gets the jobs test interval time when having errors
+     * 
+	 * @return  <code>true</code>
+	 */
+	public boolean getUseTestIntervalDown(){
+		return this.useTestIntervalDown;
+	}
+	
+	/**
+	 * Sets if the jobs queries should use test interval when job is failing
+	 * @param   useTestIntervalDown  <code>true</code>
+	 */
+	public void setUseTestIntervalDown(String useTestIntervalDown){
+		this.useTestIntervalDown = BooleanUtil.parseBooleanStringWithNull(useTestIntervalDown);
+	}
+	
     /**
      * Defines whether jobs can be executed on demand by default.
      * 
@@ -306,7 +326,29 @@ public class JobDefaultsInfo {
         return this.slaStartTime;
     }
 
-
+	/**
+     * Gets the test interval time when job have errors
+     * 
+	 * @return  <code>int</code>
+	 */
+	public Integer getTestIntervalDown(){
+		return this.testIntervalDown;
+	}
+	
+	/**
+	 * Sets the jobs queries test interval when job is failing
+	 * @param   useTestIntervalDown  <code>int</code>
+	 */
+	public void setTestIntervalDown(String testIntervalDown){
+		 try {
+			 this.testIntervalDown = this.parseStrictlyPositiveInt(testIntervalDown);
+		 } catch (NumberFormatException e) {
+	            throw new IllegalArgumentException("Invalid down test interval");
+	        } catch (IllegalArgumentException e) {
+	            throw new IllegalArgumentException(
+	                                     "Test interval must be strictly positive");
+	        }
+	}
 
     /**
      * Defines how many seconds should elapse between two automatic executions 
@@ -450,6 +492,8 @@ public class JobDefaultsInfo {
         jobDefaultsInfo.setTestInterval(requestParams.get("testInterval"));
         jobDefaultsInfo.setTimeout(requestParams.get("timeout"));
         jobDefaultsInfo.setRunSimultaneous(requestParams.get("runSimultaneous"));
+        jobDefaultsInfo.setTestIntervalDown(requestParams.get("testIntervalDown"));
+        jobDefaultsInfo.setUseTestIntervalDown(requestParams.get("useTestIntervalDown"));
 
         return jobDefaultsInfo;
     }
@@ -490,7 +534,11 @@ public class JobDefaultsInfo {
                                     this.getTimeout());
         success &= this.updateParam(defaultsMap.get("runSimultaneous"), 
         		this.getRunSimultaneous());
-
+        success &= this.updateParam(defaultsMap.get("useTestIntervalDown"), 
+        		this.getUseTestIntervalDown());
+        success &= this.updateParam(defaultsMap.get("testIntervalDown"),
+                this.getTestIntervalDown());
+           
         return success;
     }
 

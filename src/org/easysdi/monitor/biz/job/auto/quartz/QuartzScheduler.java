@@ -265,7 +265,7 @@ public class QuartzScheduler implements IJobScheduler {
     public boolean scheduleJob(Job job) {
         final JobConfiguration config = job.getConfig();
         final int testInterval = config.getTestInterval();
-
+        
         if (config.isAutomatic() && job.isValid(false)) {
             this.scheduleJob(
                  job.getJobId(),
@@ -274,6 +274,39 @@ public class QuartzScheduler implements IJobScheduler {
                              * QuartzScheduler.MILLISECONDS_IN_A_SECOND)), 
                  testInterval);
 
+            return true;
+        }
+
+        return false;
+    }
+    
+    /**
+     * Schedules a Monitor job.
+     * 
+     * @param   job the Monitor job to schedule
+     * @return      <code>true</code> if the job has been scheduled successfully
+     */
+    public boolean updateScheduleJobTime(Job job, boolean useErrorInterval) {
+        final JobConfiguration config = job.getConfig();
+        int testInterval = 6000;
+        if(useErrorInterval)
+        {
+        	if(config.getTestIntervalDown() <= 0)
+        	{
+        		testInterval = config.getTestInterval();
+        	}else
+        	{
+        		testInterval = config.getTestIntervalDown();
+        	}
+        }else
+        {
+        	testInterval = config.getTestInterval();
+        }
+        
+        if (config.isAutomatic() && job.isValid(false)) {
+            this.scheduleJob(job.getJobId(),
+                 new Date(System.currentTimeMillis() + 
+                		 (testInterval * QuartzScheduler.MILLISECONDS_IN_A_SECOND)), testInterval);
             return true;
         }
 

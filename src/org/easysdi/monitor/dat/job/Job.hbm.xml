@@ -49,7 +49,8 @@
 			<property name="url" column="SERVICE_URL" type="string" length="255" lazy="false"></property>
 			<property name="saveResponse" column="SAVE_RESPONSE" type="boolean" lazy="false"></property>
 			<property name="runSimultaneous" column="RUN_SIMULTANEOUS" type="boolean" lazy="false"></property>
-			
+			<property name="testIntervalDown" column="TEST_INTERVAL_DOWN" type="integer" lazy="false"></property>
+			<property name="useTestIntervalDown" column="USE_TEST_INTERVAL_DOWN" type="boolean" lazy="false"></property>
 		</component>
 	</class>
 </hibernate-mapping>

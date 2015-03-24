@@ -57,6 +57,8 @@ public final class JobInfo {
     private String       url;
     private Boolean		 saveResponse;
     private Boolean      runSimultaneous;
+    private int 		 testIntervalDown;
+    private boolean      useTestIntervalDown;
 
 
     
@@ -67,6 +69,49 @@ public final class JobInfo {
         
     }
     
+	/**
+     * Gets the jobs test interval time when having errors
+     * 
+	 * @return  <code>true</code>
+	 */
+	public boolean getUseTestIntervalDown(){
+		return this.useTestIntervalDown;
+	}
+	
+	/**
+	 * Sets if the jobs queries should use test interval when job is failing
+	 * @param   useTestIntervalDown  <code>true</code>
+	 */
+	public void setUseTestIntervalDown(String useTestIntervalDown){
+		this.useTestIntervalDown = BooleanUtil.parseBooleanStringWithNull(useTestIntervalDown);
+	}
+	
+	/**
+     * Gets the test interval time when job have errors
+     * 
+	 * @return  <code>int</code>
+	 */
+	public Integer getTestIntervalDown(){
+		return this.testIntervalDown;
+	}
+	
+	/**
+	 * Sets the jobs queries test interval when job is failing
+	 * @param   useTestIntervalDown  <code>int</code>
+	 */
+	public void setTestIntervalDown(String testIntervalDown){
+		 try {
+			 this.testIntervalDown = this.parseStrictlyPositiveInt(testIntervalDown);
+		 } catch (NumberFormatException e) {
+	            throw new IllegalArgumentException("Invalid down test interval");
+	        } catch (IllegalArgumentException e) {
+	            throw new IllegalArgumentException(
+	                                     "Test interval must be strictly positive");
+	        }catch (UserDataException e) {
+	            throw new IllegalArgumentException("Invalid test interval value", 
+                        e);
+	        }
+	}
 
 
     /**
@@ -820,7 +865,8 @@ public final class JobInfo {
         newJobInfo.setSlaStartTime(requestParams.get("slaStartTime"));
         newJobInfo.setTestInterval(requestParams.get("testInterval"));
         newJobInfo.setTimeout(requestParams.get("timeout"));
-
+        newJobInfo.setTestIntervalDown(requestParams.get("testIntervalDown"));
+        newJobInfo.setUseTestIntervalDown(requestParams.get("useTestIntervalDown"));
         JobInfo.copyValueToConfig(newJobInfo, "setUrl", 
                                   requestParams.get("url"), false,
                                   "url", false);
@@ -951,6 +997,10 @@ public final class JobInfo {
 
         JobInfo.copyValueToConfig(config, "setTimeout", this.getTimeout(), 
                                   false, "timeout", false);
+        JobInfo.copyValueToConfig(config,"setTestIntervalDown"
+        		, this.getTestIntervalDown(), false, "testIntervalDown", false);
+        JobInfo.copyValueToConfig(config,"setUseTestIntervalDown"
+        		, this.getUseTestIntervalDown(), false, "useTestIntervalDown", false);
     }
         
     

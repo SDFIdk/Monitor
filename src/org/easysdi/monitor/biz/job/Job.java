@@ -591,6 +591,21 @@ public class Job {
 
         return false;
     }
+    
+    /**
+     * Updates the job's automatic execution scheduling.
+     * 
+     * @return <code>true</code> if this job's scheduling has successfully been
+     *         updated
+     */
+    public boolean updateScheduleStateTime(boolean setErrorInterval) {
+
+        if (null != this.getSchedulerHelper()) {
+
+           return this.getSchedulerHelper().updateScheduleJobTime(this, setErrorInterval);
+        }
+        return false;
+    }
 
 
 
