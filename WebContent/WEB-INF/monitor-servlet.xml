@@ -120,6 +120,7 @@
 				<value>org/easysdi/monitor/dat/logging/JobAggregateHourLogEntry.hbm.xml</value>
 				<value>org/easysdi/monitor/dat/logging/QueryAggregateHourLogEntry.hbm.xml</value>
 				<value>org/easysdi/monitor/dat/job/QueryTestResult.hbm.xml</value>
+				<value>org/easysdi/monitor/dat/logging/LastLog.hbm.xml</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">
@@ -230,6 +231,10 @@
 		<constructor-arg ref="hibernateSessionFactory" />
 	</bean>
 	<bean id="queryTestResultDao" class="org.easysdi.monitor.dat.dao.hibernate.QueryTestResultDao">
+		<constructor-arg ref="hibernateSessionFactory" />
+	</bean>
+	
+	<bean id="lastlogqueryDao" class="org.easysdi.monitor.dat.dao.hibernate.LastLogQueryDao">
 		<constructor-arg ref="hibernateSessionFactory" />
 	</bean>
 	

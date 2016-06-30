@@ -1,6 +1,6 @@
 package org.easysdi.monitor.gui.webapp.controllers;
 
-import java.util.Calendar;
+//import java.util.Calendar;
 import java.util.Map;
 
 import javax.servlet.http.HttpServlet;
@@ -11,10 +11,10 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ObjectNode;
 import org.easysdi.monitor.biz.job.Job;
 import org.easysdi.monitor.biz.job.Query;
-import org.easysdi.monitor.biz.logging.LogManager;
-import org.easysdi.monitor.biz.logging.RawLogEntry;
+import org.easysdi.monitor.biz.logging.LastLog;
+//import org.easysdi.monitor.biz.logging.LogManager;
+//import org.easysdi.monitor.biz.logging.RawLogEntry;
 import org.easysdi.monitor.gui.webapp.AppContext;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 @RequestMapping({ "/serviceapi/groups/{jobId}/requests/{queryId}/status" })
 public class ServiceApiRequestStatusController extends AbstractMonitorController {
-	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -57,8 +56,10 @@ public class ServiceApiRequestStatusController extends AbstractMonitorController
         {
         	Job job = Job.getFromIdString(jobId);
     		Query query = Query.getFromIdStrings(jobId, queryId);
-    	    final LogManager queryLogManager = new LogManager(query);
-    		RawLogEntry log = queryLogManager.getLogFetcher().fetchLastLogBeforeDate(Calendar.getInstance());
+    	    //final LogManager queryLogManager = new LogManager(query);
+    	    
+    	    LastLog log = LastLog.getLastLogQuery(query.getQueryId());
+    		//RawLogEntry log = queryLogManager.getLogFetcher().fetchLastLogBeforeDate(Calendar.getInstance());
     		
     	    final ObjectNode jsonEntry = mapper.createObjectNode();
     		final ObjectNode jsonStatusEntry = mapper.createObjectNode();
@@ -67,8 +68,21 @@ public class ServiceApiRequestStatusController extends AbstractMonitorController
     		jsonEntry.put("GroupName", job.getConfig().getJobName());
     		jsonEntry.put("RequestId", queryId);
     		jsonEntry.put("RequestName", query.getConfig().getQueryName());
+    		if(log != null){
+    			jsonEntry.put("Status", log.getStatus());
+    		}else
+    		{
+    			jsonEntry.put("Status", "NOT_TESTED");
+    		}
     		
-    		jsonEntry.put("Status", log.getStatus().getValue());
+    		//jsonEntry.put("Status", log.getStatus().getValue());
+    		
+    		/*
+    		1	AVAILABLE
+			2	OUT_OF_ORDER
+			3	UNAVAILABLE
+			4	NOT_TESTED
+    		*/
 
     		jsonStatusEntry.put("success", true);
     		jsonStatusEntry.put("message", "Status data for request " + query.getConfig().getQueryName() + " retrieved successfully");

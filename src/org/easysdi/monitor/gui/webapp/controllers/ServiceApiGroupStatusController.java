@@ -1,6 +1,5 @@
 package org.easysdi.monitor.gui.webapp.controllers;
 
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
@@ -12,8 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ObjectNode;
 import org.easysdi.monitor.biz.job.*;
-import org.easysdi.monitor.biz.logging.LogManager;
-import org.easysdi.monitor.biz.logging.RawLogEntry;
+import org.easysdi.monitor.biz.logging.LastLog;
 import org.easysdi.monitor.gui.webapp.AppContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 @RequestMapping({ "/serviceapi/groups/{jobId}/status" })
 public class ServiceApiGroupStatusController extends AbstractMonitorController {
-	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -40,8 +37,7 @@ public class ServiceApiGroupStatusController extends AbstractMonitorController {
 	 * @throws Exception 
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-    @SuppressWarnings("unchecked")
-	@RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
 	protected void doGet(HttpServletRequest request, HttpServletResponse response, @PathVariable String jobId) throws Exception {
     	
         final Map<String, String> requestParams = this.getRequestParametersMap(request);
@@ -68,15 +64,16 @@ public class ServiceApiGroupStatusController extends AbstractMonitorController {
     		
     		String statusText = "";
     		Collection<org.easysdi.monitor.biz.job.Query> queries = job.getQueriesList();
-    		Iterator iter = queries.iterator();
+    		Iterator<Query> iter = queries.iterator();
 		    
     		while(iter.hasNext()) {
 		    	  org.easysdi.monitor.biz.job.Query query = (Query) iter.next();
-		    	  LogManager queryLogManager = new LogManager(query);
-		    	  RawLogEntry log = queryLogManager.getLogFetcher().fetchLastLogBeforeDate(Calendar.getInstance());
-		    	  if(checkStatus(log.getStatus().getValue(),statusText))
+		    	  //LogManager queryLogManager = new LogManager(query);
+		    	  //RawLogEntry log = queryLogManager.getLogFetcher().fetchLastLogBeforeDate(Calendar.getInstance());
+		    	  LastLog log = LastLog.getLastLogQuery(query.getQueryId());
+		    	  if(checkStatus(log.getStatus(),statusText))
 		    	  {
-		    		  statusText = log.getStatus().getValue();
+		    		  statusText = log.getStatus();
 		    	  }
 		    }	
 		    

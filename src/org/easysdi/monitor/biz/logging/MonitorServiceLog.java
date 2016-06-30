@@ -32,6 +32,7 @@ import org.easysdi.monitor.biz.job.QueryResult;
 import org.easysdi.monitor.biz.job.QueryTestResult;
 import org.easysdi.monitor.biz.job.QueryValidationResult;
 import org.easysdi.monitor.biz.job.QueryValidationSettings;
+import org.easysdi.monitor.dat.dao.LastLogQueryDaoHelper;
 import org.easysdi.monitor.dat.dao.LogDaoHelper;
 import org.easysdi.monitor.biz.job.OverviewLastQueryResult;
 import org.easysdi.monitor.biz.job.Status.StatusValue;
@@ -91,12 +92,10 @@ public class MonitorServiceLog extends ServiceLog {
         Float deliveryTime = null;
 		long responseSize = 0;
 		
-	
         this.setLastResult(result);
 
         if (this.isResultLogged()) {
             final RawLogEntry logEntry = result.createRawLogEntry();
-                   
             
 			boolean error = false;
 			if (response.getStatus() != Status.RESULT_STATE_AVAILABLE) {
@@ -241,16 +240,22 @@ public class MonitorServiceLog extends ServiceLog {
 			}
 			
 			
-			//System.out.println("BEFORE SAVE: "+logEntry.getQueryId()+" "+logEntry.getRequestTime());
+			// System.out.println("BEFORE SAVE: "+logEntry.getQueryId()+" "+logEntry.getRequestTime());
 			// Save raw log	PROBLEM HERE WITH MANY REQUEST
 			if (!LogDaoHelper.getLogDao().persistRawLog(logEntry)) {
                 this.logger.error("An exception was thrown while saving a log entry");
             }
-            
+			
+			LastLog log = new LastLog(logEntry.getQueryId(), logEntry.getStatus().getValue(), logEntry.getRequestTime());
+			if(!LastLogQueryDaoHelper.getLastLogQueryDao().create(log)){
+				this.logger.error("An exception was thrown while saving a lastlog query entry");	
+			}
+			
         	// Save or update last log
 			if (!LastLogDaoHelper.getLastLogDao().create(lastQueryEntry)) {
 				this.logger.error("An exception was thrown while saving a last log entry");
 			}
+			// Send alert mail
 			StatusValue svalue = null;
 			try
 	        {

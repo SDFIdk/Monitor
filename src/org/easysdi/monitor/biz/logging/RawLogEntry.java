@@ -45,7 +45,7 @@ public class RawLogEntry implements Comparable<RawLogEntry> {
      */
     @SuppressWarnings("unused")
     private RawLogEntry() {
-
+		
     }
 
 

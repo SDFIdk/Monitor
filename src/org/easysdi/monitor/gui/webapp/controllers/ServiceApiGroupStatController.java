@@ -35,7 +35,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 @RequestMapping({ "/serviceapi/groups/{groupId}/stats" })
 public class ServiceApiGroupStatController extends AbstractMonitorController {
-	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()

@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.easysdi.monitor.biz.logging">
+	<class name="LastLog" table="last_log">
+		<id name="queryId" type="long" column="ID_QUERY"></id>
+		<property name="status" type="string" length="45" column="STATUS" lazy="false" />
+		<property name="updateTime" type="calendar" column="UPDATE_TIME" />
+	</class>
+</hibernate-mapping>
